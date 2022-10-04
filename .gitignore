@@ -1,0 +1,11 @@
+.idea
+.ipynb_checkpoints
+__pycache__
+lightning_logs
+*.png
+*.neptune
+*.pickle
+*temp_files
+*mlruns
+*build
+*.egg-info
