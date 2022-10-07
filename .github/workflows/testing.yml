@@ -1,0 +1,39 @@
+name: Testing
+
+on:
+  push:
+    branches: [ "develop", "master" ]
+  pull_request:
+    branches: [ "develop", "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.9.*
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.9.*"
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install .
+        pip install pytest
+        pip install pytest-dependency
+        pip install pytest-ordering
+    - name: Start mlflow server
+      run: |
+        mlflow server &
+        sleep 30s
+    - name: Setting neptune api token
+      run: |
+        echo "NEPTUNE_API_TOKEN=${{ secrets.NEPTUNE_API_TOKEN }}" >> $GITHUB_ENV
+    - name: Test with pytest
+      run: |
+        pytest --neptune_project ${{ secrets.NEPTUNE_PROJECT }}
