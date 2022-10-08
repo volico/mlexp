@@ -13,8 +13,19 @@ jobs:
   test:
 
     runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.filter.outputs.workflows }}
 
     steps:
+    - uses: dorny/paths-filter@v2
+      id: filter
+      with:
+        filters: |
+          code:
+            - 'mlexp/**'
+            - 'test/**'
+          any:
+            - '**'
     - uses: actions/checkout@v3
     - name: Set up Python 3.9.*
       uses: actions/setup-python@v3
@@ -24,9 +35,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install .
-        pip install pytest
-        pip install pytest-dependency
-        pip install pytest-ordering
+        pip install -r requirements_dev.txt
     - name: Start mlflow server
       run: |
         mlflow server &
@@ -34,6 +43,11 @@ jobs:
     - name: Setting neptune api token
       run: |
         echo "NEPTUNE_API_TOKEN=${{ secrets.NEPTUNE_API_TOKEN }}" >> $GITHUB_ENV
-    - name: Test with pytest
+    - name: Test code and docs
+      if: steps.filter.outputs.code == 'true'
       run: |
         pytest --neptune_project ${{ secrets.NEPTUNE_PROJECT }}
+    - name: Test code and docs
+      if: steps.filter.outputs.code == 'false'
+      run: |
+        pytest tests/test_docs --neptune_project ${{ secrets.NEPTUNE_PROJECT }}
