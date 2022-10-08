@@ -26,5 +26,8 @@ class TestDocs:
             raise Exception(
                 "Errors or warnings were raised during running sphinx-build command. Run docs/build_docs.sh to check for warnings/errors.")
 
-        if ("no targets are out of date" not in build_out):
-            raise Exception("Documentation was not updated. Documentation is now updated, don't forget to commit it.")
+        git_status = subprocess.run(["git", "status"], capture_output=True).stdout
+        git_status = str(git_status)
+
+        if ".html" in git_status:
+            raise Exception("Documentation was not updated. Update documentation and commit it.")
