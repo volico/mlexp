@@ -47,7 +47,7 @@ jobs:
         if: steps.filter.outputs.code == 'true'
         run: |
           pytest --neptune_project ${{ secrets.NEPTUNE_PROJECT }}
-      - name: Test code and docs
+      - name: Test docs
         if: steps.filter.outputs.code == 'false'
         run: |
           pytest tests/test_docs --neptune_project ${{ secrets.NEPTUNE_PROJECT }}
