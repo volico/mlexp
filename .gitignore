@@ -7,5 +7,5 @@ lightning_logs
 *.pickle
 *temp_files
 *mlruns
-*build
+/build
 *.egg-info
