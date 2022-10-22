@@ -25,8 +25,9 @@ jobs:
             code:
               - 'mlexp/**'
               - 'test/**'
-            any:
-              - '**'
+              - '.github/**'
+              - 'requirements.txt'
+              - 'requirements-dev.txt'
       - name: Set up Python 3.9.*
         uses: actions/setup-python@v3
         with:
@@ -44,6 +45,7 @@ jobs:
         run: |
           echo "NEPTUNE_API_TOKEN=${{ secrets.NEPTUNE_API_TOKEN }}" >> $GITHUB_ENV
       - name: Test code and docs
+        if: steps.filter.outputs.code == 'true'
         run: |
           coverage run -m pytest --neptune_project ${{ secrets.NEPTUNE_PROJECT }}
           coverage xml
