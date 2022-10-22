@@ -48,7 +48,6 @@ jobs:
         if: steps.filter.outputs.code == 'true'
         run: |
           coverage run -m pytest --neptune_project ${{ secrets.NEPTUNE_PROJECT }}
-          coverage xml
       - name: Test Coverage Report
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
