@@ -46,7 +46,19 @@ jobs:
       - name: Test code and docs
         if: steps.filter.outputs.code == 'true'
         run: |
-          pytest --neptune_project ${{ secrets.NEPTUNE_PROJECT }}
+          coverage run -m pytest --neptune_project ${{ secrets.NEPTUNE_PROJECT }}
+          coverage xml
+      - name: Test Coverage Report
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        with:
+          filename: coverage.xml
+          badge: true
+          fail_below_min: True
+          thresholds: '75 90'
+          hide_branch_rate: True
+          hide_complexity: True
+          format: 'markdown'
+          output: 'both'
       - name: Test docs
         if: steps.filter.outputs.code == 'false'
         run: |
