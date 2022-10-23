@@ -39,10 +39,12 @@ jobs:
           pip install .
           pip install -r requirements-dev.txt
       - name: Start mlflow server
+        if: steps.filter.outputs.code == 'true'
         run: |
           mlflow server &
           sleep 30s
       - name: Setting neptune api token
+        if: steps.filter.outputs.code == 'true'
         run: |
           echo "NEPTUNE_API_TOKEN=${{ secrets.NEPTUNE_API_TOKEN }}" >> $GITHUB_ENV
       - name: Test code and docs
@@ -52,6 +54,7 @@ jobs:
           coverage xml -i
       - name: Test Coverage Report
         uses: irongut/CodeCoverageSummary@v1.3.0
+        if: steps.filter.outputs.code == 'true'
         with:
           filename: coverage.xml
           badge: true
