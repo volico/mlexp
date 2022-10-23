@@ -60,6 +60,15 @@ jobs:
           hide_complexity: True
           format: 'markdown'
           output: 'both'
+      - name: Add test coverage report to PR comments
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: github.event_name == 'pull_request' && steps.filter.outputs.code == 'true'
+        with:
+          recreate: true
+          path: code-coverage-results.md
+      - name: Add test coverage report to job summary
+        if: steps.filter.outputs.code == 'true'
+        run: cat code-coverage-results.md >> $GITHUB_STEP_SUMMARY
       - name: Test docs
         if: steps.filter.outputs.code == 'false'
         run: |
