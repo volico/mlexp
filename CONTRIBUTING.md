@@ -2,14 +2,6 @@
 
 To contribute to MLexp, please follow guidelines here.
 
-We use [`black`](https://black.readthedocs.io/en/stable/index.html) as a formatter to keep the coding style and format across all Python files consistent and compliant with [PEP8](https://www.python.org/dev/peps/pep-0008/). We recommend that you add `black` to your IDE as a formatter (see the [instruction](https://black.readthedocs.io/en/stable/integrations/editors.html)) or run `black` on the command line before submitting a PR as follows:
-```bash
-# move to the top directory of the causalml repository
-$ cd causalml 
-$ pip install -U black
-$ black .
-```
-
 ## Development Workflow
 
 1. Fork the `mlexp` repo. 
@@ -78,3 +70,13 @@ $ bash build_docs.sh
 ```
 
 Documentation will be available in `docs/build/html/index.html`.
+
+## Code formatting
+
+**MLexps** uses [ufmt](https://pypi.org/project/ufmt/) for formatting code.
+
+To format code:
+
+```bash
+$ ufmt format .
+```
