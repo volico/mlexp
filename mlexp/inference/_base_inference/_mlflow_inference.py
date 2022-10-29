@@ -10,13 +10,12 @@ from mlexp.inference._base_inference._base_inference import _BaseServerInference
 
 
 class _MlflowInference(_BaseServerInference):
-    """Base class for inference from mlflow.
-    """
+    """Base class for inference from mlflow."""
 
     def __init__(self, run_params: dict, downloaded_files_path):
 
-        self.run_id = run_params['run_id']
-        self.mlflow_client = mlflow.tracking.MlflowClient(run_params['tracking_uri'])
+        self.run_id = run_params["run_id"]
+        self.mlflow_client = mlflow.tracking.MlflowClient(run_params["tracking_uri"])
         super().__init__(downloaded_files_path)
 
         pass
@@ -31,27 +30,40 @@ class _MlflowInference(_BaseServerInference):
             If lgb_inference, also returns use_average_n_estimators_on_test_fold.
         """
 
-        direction = self.mlflow_client.get_run(self.run_id).data.params['direction']
-        model_type = self.mlflow_client.get_run(self.run_id).data.params['model_type']
+        direction = self.mlflow_client.get_run(self.run_id).data.params["direction"]
+        model_type = self.mlflow_client.get_run(self.run_id).data.params["model_type"]
         validation_metric_directory = self.mlflow_client.download_artifacts(
             self.run_id,
-            'saved_utils/validation_metric.pickle',
-            r'{}/downloaded_utils/'.format(self.downloaded_files_path))
-        with open(validation_metric_directory, 'rb') as f:
+            "saved_utils/validation_metric.pickle",
+            r"{}/downloaded_utils/".format(self.downloaded_files_path),
+        )
+        with open(validation_metric_directory, "rb") as f:
             validation_metric = pickle.load(f)
 
         try:
-            use_average_epochs_on_test_fold = self.mlflow_client.get_run(self.run_id).data.params[
-                'use_average_epochs_on_test_fold']
+            use_average_epochs_on_test_fold = self.mlflow_client.get_run(
+                self.run_id
+            ).data.params["use_average_epochs_on_test_fold"]
 
-            return (direction, model_type, validation_metric, use_average_epochs_on_test_fold)
+            return (
+                direction,
+                model_type,
+                validation_metric,
+                use_average_epochs_on_test_fold,
+            )
 
         except:
             try:
-                use_average_n_estimators_on_test_fold = self.mlflow_client.get_run(self.run_id).data.params[
-                    'use_average_n_estimators_on_test_fold']
+                use_average_n_estimators_on_test_fold = self.mlflow_client.get_run(
+                    self.run_id
+                ).data.params["use_average_n_estimators_on_test_fold"]
 
-                return (direction, model_type, validation_metric, use_average_n_estimators_on_test_fold)
+                return (
+                    direction,
+                    model_type,
+                    validation_metric,
+                    use_average_n_estimators_on_test_fold,
+                )
 
             except:
 
@@ -66,20 +78,30 @@ class _MlflowInference(_BaseServerInference):
         """
 
         metric_df = pd.DataFrame(
-            {metric: [step.value for step in self.mlflow_client.get_metric_history(self.run_id,
-                                                                                   metric)],
-             'step': [step.step for step in self.mlflow_client.get_metric_history(self.run_id,
-                                                                                  metric)]
-             })
+            {
+                metric: [
+                    step.value
+                    for step in self.mlflow_client.get_metric_history(
+                        self.run_id, metric
+                    )
+                ],
+                "step": [
+                    step.step
+                    for step in self.mlflow_client.get_metric_history(
+                        self.run_id, metric
+                    )
+                ],
+            }
+        )
 
-        if direction == 'maximize':
-            step = \
-                metric_df[metric_df[metric] == metric_df[metric].max()][
-                    'step'].values[0]
+        if direction == "maximize":
+            step = metric_df[metric_df[metric] == metric_df[metric].max()][
+                "step"
+            ].values[0]
         else:
-            step = \
-                metric_df[metric_df[metric] == metric_df[metric].min()][
-                    'step'].values[0]
+            step = metric_df[metric_df[metric] == metric_df[metric].min()][
+                "step"
+            ].values[0]
 
         return int(step)
 
@@ -93,8 +115,12 @@ class _MlflowInference(_BaseServerInference):
             Key of dictionary: metric
         """
 
-        return {metric:
-                    [step.value for step in self.mlflow_client.get_metric_history(self.run_id, metric)][step]}
+        return {
+            metric: [
+                step.value
+                for step in self.mlflow_client.get_metric_history(self.run_id, metric)
+            ][step]
+        }
 
     def get_step_params(self, step: int) -> dict:
         """Get hyperparameters of particular step in run.
@@ -103,16 +129,18 @@ class _MlflowInference(_BaseServerInference):
         :return: Hyperparameters of step in run.
         """
 
-        params_directory = self.mlflow_client.download_artifacts(self.run_id,
-                                                                 'params.json',
-                                                                 r'{}/'.format(self.downloaded_files_path))
+        params_directory = self.mlflow_client.download_artifacts(
+            self.run_id, "params.json", r"{}/".format(self.downloaded_files_path)
+        )
         with open(params_directory) as file:
             steps_params = json.load(file)
         steps_params = [str(x) for x in steps_params]
-        steps_params = pd.DataFrame({'value': steps_params})
-        steps_params['step'] = range(0, len(steps_params))
+        steps_params = pd.DataFrame({"value": steps_params})
+        steps_params["step"] = range(0, len(steps_params))
 
-        step_params = ast.literal_eval(steps_params[steps_params['step'] == step]['value'].values[0])
+        step_params = ast.literal_eval(
+            steps_params[steps_params["step"] == step]["value"].values[0]
+        )
 
         return step_params
 
@@ -126,9 +154,8 @@ class _MlflowInference(_BaseServerInference):
 
         file_directory, file_name = os.path.split(download_file_path)
         file_path = self.mlflow_client.download_artifacts(
-            self.run_id,
-            server_file_path,
-            file_directory)
+            self.run_id, server_file_path, file_directory
+        )
 
         return file_path
 

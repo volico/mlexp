@@ -7,8 +7,7 @@ from mlexp.inference._base_inference._base_inference import _BaseServerInference
 
 
 class _NeptuneInference(_BaseServerInference):
-    """Base class for inference from neptune.ai.
-    """
+    """Base class for inference from neptune.ai."""
 
     def __init__(self, run_params: dict, downloaded_files_path: str):
         """
@@ -28,24 +27,45 @@ class _NeptuneInference(_BaseServerInference):
             If lgb_inference, also returns use_average_n_estimators_on_test_fold.
         """
 
-        direction = self.run['direction'].fetch()
-        model_type = self.run['model_type'].fetch()
-        self.run['saved_utils/validation_metric.pickle'].download(
-            destination=r'{}/downloaded_utils/validation_metric.pickle'.format(self.downloaded_files_path)
+        direction = self.run["direction"].fetch()
+        model_type = self.run["model_type"].fetch()
+        self.run["saved_utils/validation_metric.pickle"].download(
+            destination=r"{}/downloaded_utils/validation_metric.pickle".format(
+                self.downloaded_files_path
+            )
         )
-        with open(r'{}/downloaded_utils/validation_metric.pickle'.format(self.downloaded_files_path), 'rb') as f:
+        with open(
+            r"{}/downloaded_utils/validation_metric.pickle".format(
+                self.downloaded_files_path
+            ),
+            "rb",
+        ) as f:
             validation_metric = pickle.load(f)
 
         try:
-            use_average_epochs_on_test_fold = self.run['use_average_epochs_on_test_fold'].fetch()
+            use_average_epochs_on_test_fold = self.run[
+                "use_average_epochs_on_test_fold"
+            ].fetch()
 
-            return (direction, model_type, validation_metric, use_average_epochs_on_test_fold)
+            return (
+                direction,
+                model_type,
+                validation_metric,
+                use_average_epochs_on_test_fold,
+            )
 
         except:
             try:
-                use_average_n_estimators_on_test_fold = self.run['use_average_n_estimators_on_test_fold'].fetch()
+                use_average_n_estimators_on_test_fold = self.run[
+                    "use_average_n_estimators_on_test_fold"
+                ].fetch()
 
-                return (direction, model_type, validation_metric, use_average_n_estimators_on_test_fold)
+                return (
+                    direction,
+                    model_type,
+                    validation_metric,
+                    use_average_n_estimators_on_test_fold,
+                )
 
             except:
 
@@ -61,10 +81,14 @@ class _NeptuneInference(_BaseServerInference):
 
         metric_list = self.run[metric].fetch_values()
 
-        if direction == 'maximize':
-            step = metric_list[metric_list['value'] == metric_list['value'].max()]['step'].values[0]
+        if direction == "maximize":
+            step = metric_list[metric_list["value"] == metric_list["value"].max()][
+                "step"
+            ].values[0]
         else:
-            step = metric_list[metric_list['value'] == metric_list['value'].min()]['step'].values[0]
+            step = metric_list[metric_list["value"] == metric_list["value"].min()][
+                "step"
+            ].values[0]
 
         return int(step)
 
@@ -80,7 +104,7 @@ class _NeptuneInference(_BaseServerInference):
 
         metric_list = self.run[metric].fetch_values()
 
-        return {metric: metric_list[metric_list['step'] == step]['value'].values[0]}
+        return {metric: metric_list[metric_list["step"] == step]["value"].values[0]}
 
     def get_step_params(self, step: int) -> dict:
         """Get hyperparameters of particular step in run.
@@ -91,9 +115,11 @@ class _NeptuneInference(_BaseServerInference):
         :rtype: dict
         """
 
-        steps_params = self.run['params'].fetch_values()
+        steps_params = self.run["params"].fetch_values()
 
-        step_params = ast.literal_eval(steps_params[steps_params['step'] == step]['value'].values[0])
+        step_params = ast.literal_eval(
+            steps_params[steps_params["step"] == step]["value"].values[0]
+        )
 
         return step_params
 
@@ -105,9 +131,7 @@ class _NeptuneInference(_BaseServerInference):
         :return: path to downloaded file
         """
 
-        self.run[server_file_path].download(
-            destination=download_file_path
-        )
+        self.run[server_file_path].download(destination=download_file_path)
 
         return download_file_path
 

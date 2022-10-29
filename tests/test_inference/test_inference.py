@@ -1,9 +1,10 @@
 import pytest
 
 from mlexp.inference import LgbInference, SklearnInference, TorchInference
+
 from tests.test_inference.utils import server_auth
 
-INFERENCES = {'LGB': LgbInference, 'Sklearn': SklearnInference, 'Torch': TorchInference}
+INFERENCES = {"LGB": LgbInference, "Sklearn": SklearnInference, "Torch": TorchInference}
 
 # @pytest.mark.last
 # @pytest.mark.parametrize('inference_name', ['LGB', 'Sklearn', 'Torch'])
