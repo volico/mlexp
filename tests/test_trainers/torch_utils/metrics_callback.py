@@ -10,7 +10,7 @@ class MetricsCallback(pl.Callback):
         self.n_epochs = 0
 
     def on_validation_epoch_end(self, trainer, pl_module):
-        self.validation_metric.append(trainer.logged_metrics['validation_metric'])
+        self.validation_metric.append(trainer.logged_metrics["validation_metric"])
         self.n_epochs += 1
 
     def get_metric(self):

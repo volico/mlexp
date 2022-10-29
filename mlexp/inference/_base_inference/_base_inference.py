@@ -3,8 +3,7 @@ from typing import Union
 
 
 class _BaseServerInference(ABC):
-    """Base class for inference any model from any server.
-    """
+    """Base class for inference any model from any server."""
 
     def __init__(self, downloaded_files_path):
         self.downloaded_files_path = downloaded_files_path
@@ -75,13 +74,16 @@ class _BaseServerInference(ABC):
 
 
 class _BaseModelInference(ABC):
-    """Downloading logged parameters, hyperparameters and lightgbm model.
-    """
+    """Downloading logged parameters, hyperparameters and lightgbm model."""
 
     @abstractmethod
-    def get_params_model(self, metric: str = 'metric_mean_cv', step: Union[int, str] = 'best',
-                         fold_num: Union[int, str] = 'test',
-                         trained_model: bool = True) -> dict:
+    def get_params_model(
+        self,
+        metric: str = "metric_mean_cv",
+        step: Union[int, str] = "best",
+        fold_num: Union[int, str] = "test",
+        trained_model: bool = True,
+    ) -> dict:
         """Get logged parameters, hyperparameters, metrics and lightgbm model from particular step and fold in run.
 
         :param metric: Metric to get from server and find best step.
