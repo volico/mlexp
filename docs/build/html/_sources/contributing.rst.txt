@@ -87,3 +87,13 @@ You can generate documentation in HTML locally as follows:
     bash build_docs.sh
 
 Documentation will be available in `docs/build/html/index.html`.
+
+Code formatting
+###############
+**MLexps** uses `ufmt <https://pypi.org/project/ufmt/>`_ for formatting code.
+
+To format code:
+
+.. code-block:: bash
+
+    ufmt format .
