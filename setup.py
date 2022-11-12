@@ -12,6 +12,7 @@ setup(
     version=__version__,
     description="MLexp allows to train different types of machine learning models, \
                  optimize hyperparameters and log results with simple API",
+    long_description_content_type="text/markdown",
     long_description=long_description,
     author="Ilia Avilov",
     author_email="ieavilov@gmail.com",

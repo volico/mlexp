@@ -20,8 +20,11 @@ jobs:
         python -m pip install --upgrade pip
         pip install .
         pip install -r requirements-dev.txt
+        pip install twine
     - name: Build distribution
       run: python setup.py sdist
+    - name: Check whether long distribution will render correctly on PyPi
+      run: twine check dist/*
     - name: Publish MLexp to TestPyPI
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
