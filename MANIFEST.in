@@ -1,0 +1,4 @@
+include requirements.txt
+include requirements-dev.txt
+recursive-include docs .
+recursive-include examples .
