@@ -125,14 +125,18 @@
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mlflow server
 </pre></div>
 </div>
+<p>Also you have to <a class="reference external" href="https://docs.neptune.ai/setup/setting_api_token/">set environment variable with neptune token</a>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">NEPTUNE_API_TOKEN</span><span class="o">=</span>&lt;neptune token&gt;
+</pre></div>
+</div>
 <p>Neptune project is also required (check args for more details)</p>
 <p>To run tests:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>coverage run -m pytest --neptune_project &lt;neptune project&gt;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make <span class="nb">test</span> &lt;neptune user/neptune project&gt;
 </pre></div>
 </div>
 <p>Minimum code coverage is 75%</p>
 <p>To test only documentation:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest tests/test_docs --neptune_project &lt;neptune project&gt;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ make test_docs
 </pre></div>
 </div>
 </section>
@@ -147,8 +151,7 @@
 <section id="generating-documentation-locally">
 <h2>Generating Documentation Locally<a class="headerlink" href="#generating-documentation-locally" title="Permalink to this heading"></a></h2>
 <p>You can generate documentation in HTML locally as follows:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> docs/
-bash build_docs.sh
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make build_docs
 </pre></div>
 </div>
 <p>Documentation will be available in <cite>docs/build/html/index.html</cite>.</p>

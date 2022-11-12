@@ -50,13 +50,19 @@ To test code locally you have to start mlflow server
 
     mlflow server
 
+Also you have to `set environment variable with neptune token <https://docs.neptune.ai/setup/setting_api_token/>`_:
+
+.. code-block:: bash
+
+    export NEPTUNE_API_TOKEN=<neptune token>
+
 Neptune project is also required (check args for more details)
 
 To run tests:
 
 .. code-block:: bash
 
-    coverage run -m pytest --neptune_project <neptune project>
+    make test <neptune user/neptune project>
 
 Minimum code coverage is 75%
 
@@ -64,7 +70,7 @@ To test only documentation:
 
 .. code-block:: bash
 
-    pytest tests/test_docs --neptune_project <neptune project>
+    $ make test_docs
 
 Documentation
 #############
@@ -83,8 +89,7 @@ You can generate documentation in HTML locally as follows:
 
 .. code-block:: bash
 
-    cd docs/
-    bash build_docs.sh
+    make build_docs
 
 Documentation will be available in `docs/build/html/index.html`.
 
