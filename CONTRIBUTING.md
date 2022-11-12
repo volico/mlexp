@@ -33,16 +33,22 @@ $ pip install -r requirements-dev.txt
 
 ## Tests
 
-To test code locally you have to start mlflow server
+To test code locally you have to start mlflow server:
 ```bash
 $ mlflow server
 ```
 
-Neptune project is also required (check args for more details)
+Also you have to [set environment variable with neptune token](https://docs.neptune.ai/setup/setting_api_token/):
+```bash
+$ export NEPTUNE_API_TOKEN=<neptune token>
+```
+
+
+Neptune project is also required (check pytest args for more details)
 
 To run tests:
 ```bash
-$ make test
+$ make test <neptune user/neptune project>
 ```
 
 Minimum code coverage is 75%
