@@ -17,7 +17,7 @@ setup(
     author_email="ieavilov@gmail.com",
     license="MIT",
     keywords=["machine learning"],
-    packages=find_packages(exclude=['tests']),
+    packages=find_packages(exclude=["tests"]),
     python_requires=">=3.9",
     classifiers=[
         "License :: OSI Approved :: MIT License",
