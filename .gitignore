@@ -9,3 +9,5 @@ lightning_logs
 *mlruns
 /build
 *.egg-info
+.coverage
+/dist
