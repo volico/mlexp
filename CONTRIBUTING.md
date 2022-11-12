@@ -42,14 +42,14 @@ Neptune project is also required (check args for more details)
 
 To run tests:
 ```bash
-$ coverage run -m pytest --neptune_project <neptune project>
+$ make test
 ```
 
 Minimum code coverage is 75%
 
 To test only documentation:
 ```bash
-$ pytest tests/test_docs --neptune_project <neptune project>
+$ make test_docs
 ```
 
 ## Documentation
@@ -65,8 +65,7 @@ All public classes and functions must have docstrings.
 
 You can generate documentation in HTML locally as follows:
 ```bash
-$ cd docs/
-$ bash build_docs.sh
+$ make build_docs
 ```
 
 Documentation will be available in `docs/build/html/index.html`.
