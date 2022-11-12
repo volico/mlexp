@@ -34,4 +34,5 @@ setup(
         "Programming Language :: Python :: 3.9",
     ],
     install_requires=required,
+    project_urls={"GitHub": "https://github.com/volico/mlexp"},
 )
