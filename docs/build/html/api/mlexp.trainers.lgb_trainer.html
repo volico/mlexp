@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mlexp.trainers.lgb_trainer &mdash; MLexp  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="mlexp.trainers.sklearn_trainer" href="mlexp.trainers.sklearn_trainer.html" />
+    <link rel="prev" title="mlexp.trainers" href="mlexp.trainers.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> MLexp
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">About MLexp</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="mlexp.html">mlexp</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="mlexp.inference.html">mlexp.inference</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="mlexp.trainers.html">mlexp.trainers</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">mlexp.trainers.lgb_trainer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mlexp.trainers.sklearn_trainer.html">mlexp.trainers.sklearn_trainer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mlexp.trainers.torch_trainer.html">mlexp.trainers.torch_trainer</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to MLexp</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MLexp</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="mlexp.html">mlexp</a> &raquo;</li>
+          <li><a href="mlexp.trainers.html">mlexp.trainers</a> &raquo;</li>
+      <li>mlexp.trainers.lgb_trainer</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/mlexp.trainers.lgb_trainer.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-mlexp.trainers.lgb_trainer">
+<span id="mlexp-trainers-lgb-trainer"></span><h1>mlexp.trainers.lgb_trainer<a class="headerlink" href="#module-mlexp.trainers.lgb_trainer" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="mlexp.trainers.lgb_trainer.LgbTrainer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlexp.trainers.lgb_trainer.</span></span><span class="sig-name descname"><span class="pre">LgbTrainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">validation_metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">saved_files_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_average_n_estimators_on_test_fold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimization_metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'metric_mean_cv'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mlexp.trainers.lgb_trainer.LgbTrainer" title="Permalink to this definition"></a></dt>
+<dd><p>Training, logging and hyperparameters search for lightgbm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>validation_metric</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Score function or loss function with signature validation_metric(y_true, y_pred),
+must return float/integer value of metric.</p></li>
+<li><p><strong>direction</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Direction of optimization.</p></li>
+<li><p><strong>saved_files_path</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Directory to save logging files.</p></li>
+<li><p><strong>use_average_n_estimators_on_test_fold</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to train model on test fold
+with mean number of n_estimators from validation folds or use n_estimators from params_func.</p></li>
+<li><p><strong>optimization_metric</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Metric to optimize.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="mlexp.trainers.lgb_trainer.LgbTrainer.init_run">
+<span class="sig-name descname"><span class="pre">init_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logging_server</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upload_files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">run_params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mlexp.trainers.lgb_trainer.LgbTrainer.init_run" title="Permalink to this definition"></a></dt>
+<dd><p>Initiation of logging server run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>logging_server</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code>[‘neptune’, ‘optuna’]) – logging server</p></li>
+<li><p><strong>upload_files</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – List of paths to files which will be logged in initiated run.</p></li>
+<li><p><strong>run_params</strong> – <p>If logging server == “mlflow”:
+Mlflow run parameters as kwargs (will be passed to <a class="reference external" href="https://www.mlflow.org/docs/latest/python_api/mlflow.html#mlflow.start_run">mlflow.start_run</a>).</p>
+<p>If logging_server == “neptune”:
+Kwarg neptune_run_params as dict of Neptune run parameters (will be passed to <a class="reference external" href="https://docs.neptune.ai/api-reference/neptune#.init_run">neptune.init_run</a>).</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>run id of created run.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mlexp.trainers.lgb_trainer.LgbTrainer.train">
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_trials</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params_func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampler</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mlexp.trainers.lgb_trainer.LgbTrainer.train" title="Permalink to this definition"></a></dt>
+<dd><p>Run training, hyperparameters search and logging.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – Training features.</p></li>
+<li><p><strong>y</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – Target values.</p></li>
+<li><p><strong>cv</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>) – <p>Validation indexes. All but last element of list will be used for hyperparameters search, last
+element - test fold.</p>
+<p>Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]],</span> <span class="c1"># first validation fold</span>
+ <span class="p">[[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">]],</span> <span class="c1"># second validation fold</span>
+ <span class="p">[[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">15</span><span class="p">],</span> <span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">17</span><span class="p">]]</span> <span class="c1"># test fold</span>
+ <span class="p">]</span>
+</pre></div>
+</div>
+<p>Observation with indexes [0, 1, 2, 3] will be used to train model, then this model will be tested on
+observations with indexes [4, 5]</p>
+<p>Observation with indexes [6, 7, 8, 9] will be used to train model, then this model will be tested on
+observations with indexes [10, 11]</p>
+<p>Observation with indexes [12, 13, 14, 15] will be used to train model, then this model will be tested on
+observations with indexes [16, 17]</p>
+<p>Metrics from 1st two folds will be used during hyperparameters optimization, metric from last fold will be just logged.</p>
+</p></li>
+<li><p><strong>n_trials</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Number of iterations to search for hyperparamenets.</p></li>
+<li><p><strong>params_func</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">Trial</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]) – Function which accepts optuna.trial.Trial and returns dict with hyperparameters.
+Read more about params_func in <a class="reference internal" href="../user_guide/params_func.html#paramsfunc"><span class="std std-ref">the User Guide</span></a>.</p></li>
+<li><p><strong>sampler</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSampler</span></code>) – Hyperparameters sampler from <a class="reference external" href="https://optuna.readthedocs.io/en/stable/reference/samplers.html">optuna.samplers</a></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mlexp.trainers.html" class="btn btn-neutral float-left" title="mlexp.trainers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mlexp.trainers.sklearn_trainer.html" class="btn btn-neutral float-right" title="mlexp.trainers.sklearn_trainer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Ilia Avilov.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
