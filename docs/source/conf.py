@@ -31,14 +31,14 @@ author = "Ilia Avilov"
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx_autodoc_typehints",
-    'sphinx.ext.viewcode',
-    'sphinx_tabs.tabs',
-    'sphinx-prompt',
-    'sphinx_toolbox',
+    "sphinx.ext.viewcode",
+    "sphinx_tabs.tabs",
+    "sphinx-prompt",
+    "sphinx_toolbox",
 ]
 
-github_username = 'volico'
-github_repository = 'mlexp'
+github_username = "volico"
+github_repository = "mlexp"
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
