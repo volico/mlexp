@@ -18,7 +18,7 @@ with support of gpu.
 
 ## Documentation
 
-To open documentation, open docs/build/html/index.html
+Documentation is hosted on [Read the Docs](https://mlexp.readthedocs.io/en/latest/)
 
 ## Contributing
 
