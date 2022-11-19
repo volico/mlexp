@@ -7,6 +7,10 @@
   <title>mlexp.inference.lgb_inference &mdash; MLexp  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx-toolbox-code.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/sphinx-toolbox.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx_toolbox_installation.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -16,6 +20,8 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/sphinx_toolbox_installation.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -47,7 +53,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="mlexp.html">mlexp</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="mlexp.inference.html">mlexp.inference</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">mlexp.inference.lgb_inference</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">mlexp.inference.lgb_inference</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mlexp.inference.lgb_inference.LgbInference"><code class="docutils literal notranslate"><span class="pre">LgbInference</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="mlexp.inference.sklearn_inference.html">mlexp.inference.sklearn_inference</a></li>
 <li class="toctree-l3"><a class="reference internal" href="mlexp.inference.torch_inference.html">mlexp.inference.torch_inference</a></li>
 </ul>
@@ -57,6 +66,10 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Change Log</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to MLexp</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href=":pypi: https://pypi.org/project/mlexp/">:pypi: https://pypi.org/project/mlexp/</a></li>
 </ul>
 
         </div>
@@ -72,10 +85,10 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="mlexp.html">mlexp</a> &raquo;</li>
-          <li><a href="mlexp.inference.html">mlexp.inference</a> &raquo;</li>
-      <li>mlexp.inference.lgb_inference</li>
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="mlexp.html">mlexp</a></li>
+          <li class="breadcrumb-item"><a href="mlexp.inference.html">mlexp.inference</a></li>
+      <li class="breadcrumb-item active">mlexp.inference.lgb_inference</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/api/mlexp.inference.lgb_inference.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -89,7 +102,7 @@
 <span id="mlexp-inference-lgb-inference"></span><h1>mlexp.inference.lgb_inference<a class="headerlink" href="#module-mlexp.inference.lgb_inference" title="Permalink to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="mlexp.inference.lgb_inference.LgbInference">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlexp.inference.lgb_inference.</span></span><span class="sig-name descname"><span class="pre">LgbInference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">downloaded_files_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inference_server_params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mlexp.inference.lgb_inference.LgbInference" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlexp.inference.lgb_inference.</span></span><span class="sig-name descname"><span class="pre">LgbInference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">downloaded_files_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inference_server_params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mlexp/inference/lgb_inference.html#LgbInference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlexp.inference.lgb_inference.LgbInference" title="Permalink to this definition"></a></dt>
 <dd><p>Downloading logged parameters, hyperparameters and scikit-learn model from particular server.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -104,7 +117,7 @@ For neptune - ‘project’ in form of ({User}/{Project Name}) and ‘run’ as 
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlexp.inference.lgb_inference.LgbInference.get_params_model">
-<span class="sig-name descname"><span class="pre">get_params_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'metric_mean_cv'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'best'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold_num</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'test'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trained_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mlexp.inference.lgb_inference.LgbInference.get_params_model" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_params_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'metric_mean_cv'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'best'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold_num</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'test'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trained_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mlexp/inference/lgb_inference.html#LgbInference.get_params_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlexp.inference.lgb_inference.LgbInference.get_params_model" title="Permalink to this definition"></a></dt>
 <dd><p>Get logged parameters, hyperparameters, metrics and lightgbm model from particular step and fold in run.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

@@ -7,6 +7,10 @@
   <title>mlexp &mdash; MLexp  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx-toolbox-code.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/sphinx-toolbox.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx_toolbox_installation.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -16,6 +20,8 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/sphinx_toolbox_installation.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -53,6 +59,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Change Log</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to MLexp</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href=":pypi: https://pypi.org/project/mlexp/">:pypi: https://pypi.org/project/mlexp/</a></li>
+</ul>
 
         </div>
       </div>
@@ -67,8 +77,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>mlexp</li>
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">mlexp</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/api/mlexp.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -83,15 +93,54 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="mlexp.inference.html">mlexp.inference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="mlexp.inference.lgb_inference.html">mlexp.inference.lgb_inference</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlexp.inference.sklearn_inference.html">mlexp.inference.sklearn_inference</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlexp.inference.torch_inference.html">mlexp.inference.torch_inference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlexp.inference.lgb_inference.html">mlexp.inference.lgb_inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mlexp.inference.lgb_inference.html#mlexp.inference.lgb_inference.LgbInference"><code class="docutils literal notranslate"><span class="pre">LgbInference</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mlexp.inference.lgb_inference.html#mlexp.inference.lgb_inference.LgbInference.get_params_model"><code class="docutils literal notranslate"><span class="pre">LgbInference.get_params_model()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mlexp.inference.sklearn_inference.html">mlexp.inference.sklearn_inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mlexp.inference.sklearn_inference.html#mlexp.inference.sklearn_inference.SklearnInference"><code class="docutils literal notranslate"><span class="pre">SklearnInference</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mlexp.inference.sklearn_inference.html#mlexp.inference.sklearn_inference.SklearnInference.get_params_model"><code class="docutils literal notranslate"><span class="pre">SklearnInference.get_params_model()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mlexp.inference.torch_inference.html">mlexp.inference.torch_inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mlexp.inference.torch_inference.html#mlexp.inference.torch_inference.TorchInference"><code class="docutils literal notranslate"><span class="pre">TorchInference</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mlexp.inference.torch_inference.html#mlexp.inference.torch_inference.TorchInference.get_params_model"><code class="docutils literal notranslate"><span class="pre">TorchInference.get_params_model()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="mlexp.trainers.html">mlexp.trainers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="mlexp.trainers.lgb_trainer.html">mlexp.trainers.lgb_trainer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlexp.trainers.sklearn_trainer.html">mlexp.trainers.sklearn_trainer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlexp.trainers.torch_trainer.html">mlexp.trainers.torch_trainer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlexp.trainers.lgb_trainer.html">mlexp.trainers.lgb_trainer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mlexp.trainers.lgb_trainer.html#mlexp.trainers.lgb_trainer.LgbTrainer"><code class="docutils literal notranslate"><span class="pre">LgbTrainer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mlexp.trainers.lgb_trainer.html#mlexp.trainers.lgb_trainer.LgbTrainer.init_run"><code class="docutils literal notranslate"><span class="pre">LgbTrainer.init_run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mlexp.trainers.lgb_trainer.html#mlexp.trainers.lgb_trainer.LgbTrainer.train"><code class="docutils literal notranslate"><span class="pre">LgbTrainer.train()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mlexp.trainers.sklearn_trainer.html">mlexp.trainers.sklearn_trainer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mlexp.trainers.sklearn_trainer.html#mlexp.trainers.sklearn_trainer.SklearnTrainer"><code class="docutils literal notranslate"><span class="pre">SklearnTrainer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mlexp.trainers.sklearn_trainer.html#mlexp.trainers.sklearn_trainer.SklearnTrainer.init_run"><code class="docutils literal notranslate"><span class="pre">SklearnTrainer.init_run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mlexp.trainers.sklearn_trainer.html#mlexp.trainers.sklearn_trainer.SklearnTrainer.train"><code class="docutils literal notranslate"><span class="pre">SklearnTrainer.train()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mlexp.trainers.torch_trainer.html">mlexp.trainers.torch_trainer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mlexp.trainers.torch_trainer.html#mlexp.trainers.torch_trainer.TorchTrainer"><code class="docutils literal notranslate"><span class="pre">TorchTrainer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mlexp.trainers.torch_trainer.html#mlexp.trainers.torch_trainer.TorchTrainer.init_run"><code class="docutils literal notranslate"><span class="pre">TorchTrainer.init_run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mlexp.trainers.torch_trainer.html#mlexp.trainers.torch_trainer.TorchTrainer.train"><code class="docutils literal notranslate"><span class="pre">TorchTrainer.train()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

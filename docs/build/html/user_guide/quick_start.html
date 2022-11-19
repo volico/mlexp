@@ -7,6 +7,10 @@
   <title>Quick start &mdash; MLexp  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx-toolbox-code.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/sphinx-toolbox.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx_toolbox_installation.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -16,6 +20,8 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/sphinx_toolbox_installation.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -58,6 +64,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Change Log</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to MLexp</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href=":pypi: https://pypi.org/project/mlexp/">:pypi: https://pypi.org/project/mlexp/</a></li>
+</ul>
 
         </div>
       </div>
@@ -72,9 +82,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="index.html">User Guide</a> &raquo;</li>
-      <li>Quick start</li>
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">User Guide</a></li>
+      <li class="breadcrumb-item active">Quick start</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/user_guide/quick_start.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -99,13 +109,13 @@ optimize hyperparameters and log results to mlflow server.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define function which returns set of parameters.</span>
 <span class="k">def</span> <span class="nf">params_func</span><span class="p">(</span><span class="n">trial</span><span class="p">):</span>
     <span class="k">return</span><span class="p">(</span>
-        <span class="p">{</span>
-            <span class="s1">&#39;model_params&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;boosting&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_categorical</span><span class="p">(</span><span class="s1">&#39;boosting&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;gbdt&#39;</span><span class="p">,</span> <span class="s1">&#39;dart&#39;</span><span class="p">,</span> <span class="s1">&#39;goss&#39;</span><span class="p">]),</span>
-                             <span class="s1">&#39;feature_fraction&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_float</span><span class="p">(</span><span class="s1">&#39;feature_fraction&#39;</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-                             <span class="s1">&#39;min_child_samples&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_int</span><span class="p">(</span><span class="s1">&#39;min_child_samples&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span>
-                             <span class="s1">&#39;n_estimators&#39;</span><span class="p">:</span> <span class="mi">500</span><span class="p">},</span>
-            <span class="s1">&#39;lgb_data_set_params&#39;</span><span class="p">:</span> <span class="p">{}</span>
-        <span class="p">}</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;model_params&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;boosting&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_categorical</span><span class="p">(</span><span class="s1">&#39;boosting&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;gbdt&#39;</span><span class="p">,</span> <span class="s1">&#39;dart&#39;</span><span class="p">,</span> <span class="s1">&#39;goss&#39;</span><span class="p">]),</span>
+                 <span class="s1">&#39;feature_fraction&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_float</span><span class="p">(</span><span class="s1">&#39;feature_fraction&#39;</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                 <span class="s1">&#39;min_child_samples&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_int</span><span class="p">(</span><span class="s1">&#39;min_child_samples&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span>
+                 <span class="s1">&#39;n_estimators&#39;</span><span class="p">:</span> <span class="mi">500</span><span class="p">},</span>
+        <span class="s1">&#39;lgb_data_set_params&#39;</span><span class="p">:</span> <span class="p">{}</span>
+    <span class="p">}</span>
     <span class="p">)</span>
 </pre></div>
 </div>
@@ -113,7 +123,7 @@ optimize hyperparameters and log results to mlflow server.</p>
 <ul class="simple">
 <li><p><em>boosting</em> will be chosen from [‘gbdt’, ‘dart’, ‘goss’] during hyperparameter optimization</p></li>
 <li><p><em>feature_fraction</em> will be chosen from uniform distribution from 0.01 to 1 during hyperparameter optimization</p></li>
-<li><p><em>min_child_samples</em> will be chosen itegers from 2 to 256 during hyperparameter optimization</p></li>
+<li><p><em>min_child_samples</em> will be chosen integers from 2 to 256 during hyperparameter optimization</p></li>
 <li><p>no parameters will be passed to lightgbm.Dataset, except for <em>data</em> and <em>label</em>, which are passed from training data automatically</p></li>
 </ul>
 <p>Now we can use python API of mlexp.trainers.LgbTrainer to train model,

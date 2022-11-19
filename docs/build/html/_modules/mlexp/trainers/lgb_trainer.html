@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mlexp.trainers.lgb_trainer &mdash; MLexp  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/sphinx-toolbox-code.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/sphinx-toolbox.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/sphinx_toolbox_installation.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/tabs.js"></script>
+        <script src="../../../_static/sphinx_toolbox_installation.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> MLexp
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">About MLexp</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_guide/index.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/mlexp.html">mlexp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing to MLexp</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href=":pypi: https://pypi.org/project/mlexp/">:pypi: https://pypi.org/project/mlexp/</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">MLexp</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">mlexp.trainers.lgb_trainer</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for mlexp.trainers.lgb_trainer</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span>
+
+<span class="kn">import</span> <span class="nn">lightgbm</span> <span class="k">as</span> <span class="nn">lgb</span>
+<span class="kn">import</span> <span class="nn">mlflow</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">mlexp.trainers._base_logger</span> <span class="kn">import</span> <span class="n">_BaseLogger</span>
+<span class="kn">from</span> <span class="nn">mlexp.trainers._base_trainer</span> <span class="kn">import</span> <span class="n">_BaseTrainer</span>
+<span class="kn">from</span> <span class="nn">mlexp.trainers._utils</span> <span class="kn">import</span> <span class="n">_save_metric_curves</span><span class="p">,</span> <span class="n">_save_models</span>
+
+
+<div class="viewcode-block" id="LgbTrainer"><a class="viewcode-back" href="../../../api/mlexp.trainers.lgb_trainer.html#mlexp.trainers.lgb_trainer.LgbTrainer">[docs]</a><span class="k">class</span> <span class="nc">LgbTrainer</span><span class="p">(</span><span class="n">_BaseTrainer</span><span class="p">,</span> <span class="n">_BaseLogger</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Training, logging and hyperparameters search for lightgbm.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">validation_metric</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="nb">float</span><span class="p">],</span>
+        <span class="n">direction</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">saved_files_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">use_average_n_estimators_on_test_fold</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">optimization_metric</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;metric_mean_cv&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param validation_metric: Score function or loss function with signature validation_metric(y_true, y_pred),</span>
+<span class="sd">            must return float/integer value of metric.</span>
+<span class="sd">        :param direction: Direction of optimization.</span>
+<span class="sd">        :param saved_files_path: Directory to save logging files.</span>
+<span class="sd">        :param use_average_n_estimators_on_test_fold:  Whether to train model on test fold</span>
+<span class="sd">            with mean number of n_estimators from validation folds or use n_estimators from params_func.</span>
+<span class="sd">        :param optimization_metric: Metric to optimize.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">validation_metric</span><span class="p">,</span> <span class="n">Callable</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="nb">type</span><span class="p">(</span><span class="n">use_average_n_estimators_on_test_fold</span><span class="p">)</span> <span class="o">==</span> <span class="nb">bool</span>
+        <span class="p">),</span> <span class="s2">&quot;log_metric_curves must be bool&quot;</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">direction</span><span class="p">,</span>
+            <span class="n">saved_files_path</span><span class="p">,</span>
+            <span class="n">optimization_metric</span><span class="p">,</span>
+            <span class="n">validation_metric</span><span class="p">,</span>
+            <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;lgb&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_average_n_estimators_on_test_fold</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">use_average_n_estimators_on_test_fold</span>
+        <span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">/saved_metric_curves/&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">saved_files_path</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_initiate_neptune_run</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">neptune_run_params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">upload_files</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Initiation of neptune run.</span>
+
+<span class="sd">        :param neptune_run_params: Neptune run parameters (will be passed to `neptune.init_run &lt;https://docs.neptune.ai/api-reference/neptune#.init_run&gt;`_).</span>
+<span class="sd">        :param upload_files: List of paths to files which will be logged in neptune run.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">[</span>
+            <span class="s2">&quot;use_average_n_estimators_on_test_fold&quot;</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_average_n_estimators_on_test_fold</span>
+
+    <span class="k">def</span> <span class="nf">_initiate_mlflow_run</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">tracking_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">experiment_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">mlflow_run_params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+        <span class="n">upload_files</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Initiation of mlflow run.</span>
+
+<span class="sd">        :param tracking_uri: URI of mlflow server (will be passed to `mlflow.set_tracking_uri &lt;https://www.mlflow.org/docs/latest/python_api/mlflow.html#mlflow.set_tracking_uri&gt;`_).</span>
+<span class="sd">        :param experiment_name: Name of mlflow experiment for logging (will be passed to `mlflow.set_experiment &lt;https://www.mlflow.org/docs/latest/python_api/mlflow.html#mlflow.set_experiment&gt;`_)</span>
+<span class="sd">        :param mlflow_run_params: Mlflow run parameters (will be passed to `mlflow.start_run &lt;https://www.mlflow.org/docs/latest/python_api/mlflow.html#mlflow.start_run&gt;`_).</span>
+<span class="sd">        :param upload_files: List of paths to files which will be logged in neptune run.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">mlflow</span><span class="o">.</span><span class="n">log_param</span><span class="p">(</span>
+            <span class="s2">&quot;use_average_n_estimators_on_test_fold&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">use_average_n_estimators_on_test_fold</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_scoring_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">validation_metric</span><span class="p">,</span> <span class="n">direction</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">lgb_scoring</span><span class="p">(</span>
+            <span class="n">y_hat</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">validation_metric</span><span class="o">=</span><span class="n">validation_metric</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span>
+        <span class="p">):</span>
+
+            <span class="n">y_true</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_label</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="s2">&quot;maximize&quot;</span><span class="p">:</span>
+                <span class="n">is_higher_better</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">is_higher_better</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">return</span> <span class="s2">&quot;val_score&quot;</span><span class="p">,</span> <span class="n">validation_metric</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_hat</span><span class="p">),</span> <span class="n">is_higher_better</span>
+
+        <span class="k">return</span> <span class="n">lgb_scoring</span>
+
+    <span class="k">def</span> <span class="nf">_train_validation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">cv</span><span class="p">,</span> <span class="n">lgb_scoring</span><span class="p">):</span>
+
+        <span class="n">train_data</span> <span class="o">=</span> <span class="n">lgb</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;lgb_data_set_params&quot;</span><span class="p">])</span>
+        <span class="n">validation_results</span> <span class="o">=</span> <span class="n">lgb</span><span class="o">.</span><span class="n">cv</span><span class="p">(</span>
+            <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;model_params&quot;</span><span class="p">],</span>
+            <span class="n">train_set</span><span class="o">=</span><span class="n">train_data</span><span class="p">,</span>
+            <span class="n">folds</span><span class="o">=</span><span class="n">cv</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">feval</span><span class="o">=</span><span class="n">lgb_scoring</span><span class="p">,</span>
+            <span class="n">return_cvbooster</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">num_iters</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">booster</span> <span class="ow">in</span> <span class="n">validation_results</span><span class="p">[</span><span class="s2">&quot;cvbooster&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">boosters</span><span class="p">:</span>
+            <span class="n">num_iters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">booster</span><span class="o">.</span><span class="n">current_iteration</span><span class="p">())</span>
+        <span class="n">mean_num_iters</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">num_iters</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">validation_results</span><span class="p">[</span><span class="s2">&quot;val_score-mean&quot;</span><span class="p">],</span>
+            <span class="n">validation_results</span><span class="p">[</span><span class="s2">&quot;val_score-stdv&quot;</span><span class="p">],</span>
+            <span class="n">mean_num_iters</span><span class="p">,</span>
+            <span class="n">validation_results</span><span class="p">[</span><span class="s2">&quot;cvbooster&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">boosters</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_train_test</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">cv</span><span class="p">,</span> <span class="n">lgb_scoring</span><span class="p">):</span>
+
+        <span class="n">X_train</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">cv</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="p">:]</span>
+        <span class="n">y_train</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">cv</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">X_test</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">cv</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="p">:]</span>
+        <span class="n">y_test</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">cv</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">train_data</span> <span class="o">=</span> <span class="n">lgb</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;lgb_data_set_params&quot;</span><span class="p">])</span>
+        <span class="n">test_data</span> <span class="o">=</span> <span class="n">lgb</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;lgb_data_set_params&quot;</span><span class="p">])</span>
+        <span class="n">test_results</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">trained_test_model</span> <span class="o">=</span> <span class="n">lgb</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
+            <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;model_params&quot;</span><span class="p">],</span>
+            <span class="n">train_set</span><span class="o">=</span><span class="n">train_data</span><span class="p">,</span>
+            <span class="n">valid_sets</span><span class="o">=</span><span class="p">[</span><span class="n">test_data</span><span class="p">],</span>
+            <span class="n">valid_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;test_data&quot;</span><span class="p">],</span>
+            <span class="n">feval</span><span class="o">=</span><span class="n">lgb_scoring</span><span class="p">,</span>
+            <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">lgb</span><span class="o">.</span><span class="n">record_evaluation</span><span class="p">(</span><span class="n">test_results</span><span class="p">)],</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">test_results</span><span class="p">[</span><span class="s2">&quot;test_data&quot;</span><span class="p">][</span><span class="s2">&quot;val_score&quot;</span><span class="p">],</span> <span class="n">trained_test_model</span>
+
+    <span class="k">def</span> <span class="nf">_run_iteration</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">cv</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">trial_number</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Train, evaluate lightgbm model with defined parameters and log metrics.</span>
+<span class="sd">        :param X: training data</span>
+<span class="sd">        :type X: ndarray</span>
+<span class="sd">        :param y: target values</span>
+<span class="sd">        :type y: ndarray</span>
+<span class="sd">        :param cv: indexes of cross validation</span>
+<span class="sd">        :type cv: iterable of (train_inex, test_index)</span>
+<span class="sd">        :param params: dictionary of parameters</span>
+<span class="sd">        :type params: dict</span>
+<span class="sd">        :param trial_number: number of current trial</span>
+<span class="sd">        :type trial_number: int</span>
+<span class="sd">        :return: metrics of current iteration</span>
+<span class="sd">        :rtype: dictionary with keys (&#39;metric_mean_cv&#39; - mean metric on cross validation,</span>
+<span class="sd">                                      &#39;metric_std_cv&#39; - standard deviation of metric on cross validation</span>
+<span class="sd">                                      &#39;metric_test&#39; - metric on test data)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">initial_n_estimators</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;model_params&quot;</span><span class="p">][</span><span class="s2">&quot;n_estimators&quot;</span><span class="p">]</span>
+        <span class="n">lgb_scoring</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scoring_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">validation_metric</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">)</span>
+
+        <span class="p">(</span>
+            <span class="n">metric_mean_validation_curve</span><span class="p">,</span>
+            <span class="n">metric_std_validation_curve</span><span class="p">,</span>
+            <span class="n">n_estimators</span><span class="p">,</span>
+            <span class="n">trained_validation_models</span><span class="p">,</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_train_validation</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">cv</span><span class="p">,</span> <span class="n">lgb_scoring</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_average_n_estimators_on_test_fold</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;model_params&quot;</span><span class="p">][</span><span class="s2">&quot;n_estimators&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">n_estimators</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;validation_mean_estimators&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">n_estimators</span>
+
+        <span class="n">metric_test_curve</span><span class="p">,</span> <span class="n">trained_test_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_train_test</span><span class="p">(</span>
+            <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">cv</span><span class="p">,</span> <span class="n">lgb_scoring</span>
+        <span class="p">)</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;model_params&quot;</span><span class="p">][</span><span class="s2">&quot;n_estimators&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">initial_n_estimators</span>
+
+        <span class="n">model_file_paths</span> <span class="o">=</span> <span class="n">_save_models</span><span class="p">(</span>
+            <span class="p">[</span><span class="o">*</span><span class="n">trained_validation_models</span><span class="p">,</span> <span class="n">trained_test_model</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">saved_files_path</span><span class="p">,</span>
+            <span class="n">trial_number</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">metric_curves</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;mean_validation_metric&quot;</span><span class="p">:</span> <span class="n">metric_mean_validation_curve</span><span class="p">,</span>
+            <span class="s2">&quot;fold_test_metric&quot;</span><span class="p">:</span> <span class="n">metric_test_curve</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="n">metric_curves_file</span> <span class="o">=</span> <span class="n">_save_metric_curves</span><span class="p">(</span>
+            <span class="n">metric_curves</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">saved_files_path</span><span class="p">,</span> <span class="n">trial_number</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;metrics&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;metric_mean_cv&quot;</span><span class="p">:</span> <span class="n">metric_mean_validation_curve</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="s2">&quot;metric_std_cv&quot;</span><span class="p">:</span> <span class="n">metric_std_validation_curve</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="s2">&quot;metric_test&quot;</span><span class="p">:</span> <span class="n">metric_test_curve</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;file_paths&quot;</span><span class="p">:</span> <span class="p">[</span><span class="o">*</span><span class="n">model_file_paths</span><span class="p">,</span> <span class="n">metric_curves_file</span><span class="p">],</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="n">params</span><span class="p">,</span>
+        <span class="p">}</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Ilia Avilov.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

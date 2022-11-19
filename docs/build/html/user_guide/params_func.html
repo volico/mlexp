@@ -7,6 +7,10 @@
   <title>About params_func &mdash; MLexp  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx-toolbox-code.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/sphinx-toolbox.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx_toolbox_installation.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -16,6 +20,8 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/sphinx_toolbox_installation.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -60,6 +66,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Change Log</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to MLexp</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href=":pypi: https://pypi.org/project/mlexp/">:pypi: https://pypi.org/project/mlexp/</a></li>
+</ul>
 
         </div>
       </div>
@@ -74,9 +84,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="index.html">User Guide</a> &raquo;</li>
-      <li>About params_func</li>
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">User Guide</a></li>
+      <li class="breadcrumb-item active">About params_func</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/user_guide/params_func.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -103,12 +113,12 @@ All methods of optuna.trial.Trial you can find in
 <p>Example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">params_func</span><span class="p">(</span><span class="n">trial</span><span class="p">):</span>
     <span class="k">return</span><span class="p">(</span>
-        <span class="p">{</span>
-            <span class="s1">&#39;model_params&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;boosting&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_categorical</span><span class="p">(</span><span class="s1">&#39;boosting&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;gbdt&#39;</span><span class="p">,</span> <span class="s1">&#39;dart&#39;</span><span class="p">,</span> <span class="s1">&#39;goss&#39;</span><span class="p">]),</span>
-                             <span class="s1">&#39;feature_fraction&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_float</span><span class="p">(</span><span class="s1">&#39;feature_fraction&#39;</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-                             <span class="s1">&#39;min_child_samples&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_int</span><span class="p">(</span><span class="s1">&#39;min_child_samples&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">256</span><span class="p">)}</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;model_params&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;boosting&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_categorical</span><span class="p">(</span><span class="s1">&#39;boosting&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;gbdt&#39;</span><span class="p">,</span> <span class="s1">&#39;dart&#39;</span><span class="p">,</span> <span class="s1">&#39;goss&#39;</span><span class="p">]),</span>
+                 <span class="s1">&#39;feature_fraction&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_float</span><span class="p">(</span><span class="s1">&#39;feature_fraction&#39;</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                 <span class="s1">&#39;min_child_samples&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_int</span><span class="p">(</span><span class="s1">&#39;min_child_samples&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">256</span><span class="p">)}</span>
 
-        <span class="p">}</span>
+    <span class="p">}</span>
     <span class="p">)</span>
 </pre></div>
 </div>
@@ -129,21 +139,21 @@ All methods of optuna.trial.Trial you can find in
 <p>Example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">params_func</span><span class="p">(</span><span class="n">trial</span><span class="p">):</span>
     <span class="k">return</span><span class="p">(</span>
-        <span class="p">{</span>
-            <span class="s1">&#39;model_params&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;objective&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_categorical</span><span class="p">(</span><span class="s1">&#39;objective&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;huber&#39;</span><span class="p">,</span> <span class="s1">&#39;fair&#39;</span><span class="p">,</span> <span class="s1">&#39;l2&#39;</span><span class="p">,</span> <span class="s1">&#39;l1&#39;</span><span class="p">,</span> <span class="s1">&#39;mape&#39;</span><span class="p">]),</span>
-                             <span class="s1">&#39;boosting&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_categorical</span><span class="p">(</span><span class="s1">&#39;boosting&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;gbdt&#39;</span><span class="p">,</span> <span class="s1">&#39;dart&#39;</span><span class="p">,</span> <span class="s1">&#39;goss&#39;</span><span class="p">]),</span>
-                             <span class="s1">&#39;n_jobs&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
-                             <span class="s1">&#39;n_estimators&#39;</span><span class="p">:</span> <span class="mi">500</span><span class="p">,</span>
-                             <span class="s1">&#39;random_state&#39;</span><span class="p">:</span> <span class="n">random_state</span><span class="p">,</span>
-                             <span class="s1">&#39;bagging_fraction&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_float</span><span class="p">(</span><span class="s1">&#39;bagging_fraction&#39;</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-                             <span class="s1">&#39;feature_fraction&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_float</span><span class="p">(</span><span class="s1">&#39;feature_fraction&#39;</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-                             <span class="s1">&#39;min_child_samples&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_int</span><span class="p">(</span><span class="s1">&#39;min_child_samples&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span>
-                             <span class="s1">&#39;num_leaves&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_int</span><span class="p">(</span><span class="s1">&#39;num_leaves&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span>
-                             <span class="s1">&#39;learning_rate&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_float</span><span class="p">(</span><span class="s1">&#39;learning_rate&#39;</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">)},</span>
-            <span class="s1">&#39;lgb_data_set_params&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;feature_name&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;first_feature&#39;</span><span class="p">,</span> <span class="s1">&#39;second_feature&#39;</span><span class="p">],</span>
-                                    <span class="s1">&#39;categorical_feature&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;first_feature&#39;</span><span class="p">]},</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;model_params&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;objective&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_categorical</span><span class="p">(</span><span class="s1">&#39;objective&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;huber&#39;</span><span class="p">,</span> <span class="s1">&#39;fair&#39;</span><span class="p">,</span> <span class="s1">&#39;l2&#39;</span><span class="p">,</span> <span class="s1">&#39;l1&#39;</span><span class="p">,</span> <span class="s1">&#39;mape&#39;</span><span class="p">]),</span>
+                 <span class="s1">&#39;boosting&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_categorical</span><span class="p">(</span><span class="s1">&#39;boosting&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;gbdt&#39;</span><span class="p">,</span> <span class="s1">&#39;dart&#39;</span><span class="p">,</span> <span class="s1">&#39;goss&#39;</span><span class="p">]),</span>
+                 <span class="s1">&#39;n_jobs&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="s1">&#39;n_estimators&#39;</span><span class="p">:</span> <span class="mi">500</span><span class="p">,</span>
+                 <span class="s1">&#39;random_state&#39;</span><span class="p">:</span> <span class="n">random_state</span><span class="p">,</span>
+                 <span class="s1">&#39;bagging_fraction&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_float</span><span class="p">(</span><span class="s1">&#39;bagging_fraction&#39;</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                 <span class="s1">&#39;feature_fraction&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_float</span><span class="p">(</span><span class="s1">&#39;feature_fraction&#39;</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                 <span class="s1">&#39;min_child_samples&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_int</span><span class="p">(</span><span class="s1">&#39;min_child_samples&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span>
+                 <span class="s1">&#39;num_leaves&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_int</span><span class="p">(</span><span class="s1">&#39;num_leaves&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span>
+                 <span class="s1">&#39;learning_rate&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_float</span><span class="p">(</span><span class="s1">&#39;learning_rate&#39;</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">)},</span>
+        <span class="s1">&#39;lgb_data_set_params&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;feature_name&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;first_feature&#39;</span><span class="p">,</span> <span class="s1">&#39;second_feature&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;categorical_feature&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;first_feature&#39;</span><span class="p">]},</span>
 
-        <span class="p">}</span>
+    <span class="p">}</span>
     <span class="p">)</span>
 </pre></div>
 </div>
@@ -158,10 +168,10 @@ All methods of optuna.trial.Trial you can find in
 <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Ridge.html">sklearn.linear_model.Ridge</a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">params_func</span><span class="p">(</span><span class="n">trial</span><span class="p">):</span>
     <span class="k">return</span><span class="p">(</span>
-        <span class="p">{</span>
-            <span class="s1">&#39;model_params&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;random_state&#39;</span><span class="p">:</span> <span class="n">random_state</span><span class="p">,</span>
-                             <span class="s1">&#39;alpha&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_float</span><span class="p">(</span><span class="s1">&#39;alpha&#39;</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mi">1</span><span class="p">)},</span>
-        <span class="p">}</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;model_params&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;random_state&#39;</span><span class="p">:</span> <span class="n">random_state</span><span class="p">,</span>
+                 <span class="s1">&#39;alpha&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_float</span><span class="p">(</span><span class="s1">&#39;alpha&#39;</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mi">1</span><span class="p">)},</span>
+    <span class="p">}</span>
     <span class="p">)</span>
 </pre></div>
 </div>
@@ -178,23 +188,23 @@ All methods of optuna.trial.Trial you can find in
 <p>Example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">params_func</span><span class="p">(</span><span class="n">trial</span><span class="p">):</span>
     <span class="k">return</span><span class="p">(</span>
-        <span class="p">{</span>
-            <span class="s1">&#39;model_params&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;optimizer&#39;</span><span class="p">:</span> <span class="s1">&#39;SGD&#39;</span><span class="p">,</span>
-                             <span class="s1">&#39;objective&#39;</span><span class="p">:</span> <span class="s1">&#39;cross_entropy&#39;</span><span class="p">,</span>
-                             <span class="s1">&#39;lr&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_float</span><span class="p">(</span><span class="s1">&#39;lr&#39;</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-                             <span class="s1">&#39;vocab_size&#39;</span><span class="p">:</span> <span class="mi">500</span><span class="p">,</span>
-                             <span class="s1">&#39;embedding_size&#39;</span><span class="p">:</span> <span class="mi">150</span><span class="p">,</span>
-                             <span class="s1">&#39;weight_decay&#39;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">},</span>
-            <span class="s1">&#39;trainer_params&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;min_epochs&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-                               <span class="s1">&#39;max_epochs&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-                               <span class="s1">&#39;num_sanity_val_steps&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-                               <span class="s1">&#39;progress_bar_refresh_rate&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-                               <span class="s1">&#39;gpus&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
-            <span class="s1">&#39;data_loaders_params&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;return_wide_format&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
-            <span class="s1">&#39;EarlyStopping_params&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;min_delta&#39;</span><span class="p">:</span> <span class="mf">0.001</span><span class="p">,</span>
-                                     <span class="s1">&#39;patience&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
-                                     <span class="s1">&#39;monitor&#39;</span><span class="p">:</span> <span class="s1">&#39;validation&#39;</span><span class="p">}</span>
-        <span class="p">}</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;model_params&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;optimizer&#39;</span><span class="p">:</span> <span class="s1">&#39;SGD&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;objective&#39;</span><span class="p">:</span> <span class="s1">&#39;cross_entropy&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;lr&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_float</span><span class="p">(</span><span class="s1">&#39;lr&#39;</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                 <span class="s1">&#39;vocab_size&#39;</span><span class="p">:</span> <span class="mi">500</span><span class="p">,</span>
+                 <span class="s1">&#39;embedding_size&#39;</span><span class="p">:</span> <span class="mi">150</span><span class="p">,</span>
+                 <span class="s1">&#39;weight_decay&#39;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">},</span>
+        <span class="s1">&#39;trainer_params&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;min_epochs&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+                   <span class="s1">&#39;max_epochs&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+                   <span class="s1">&#39;num_sanity_val_steps&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                   <span class="s1">&#39;progress_bar_refresh_rate&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                   <span class="s1">&#39;gpus&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+        <span class="s1">&#39;data_loaders_params&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;return_wide_format&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+        <span class="s1">&#39;EarlyStopping_params&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;min_delta&#39;</span><span class="p">:</span> <span class="mf">0.001</span><span class="p">,</span>
+                     <span class="s1">&#39;patience&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                     <span class="s1">&#39;monitor&#39;</span><span class="p">:</span> <span class="s1">&#39;validation&#39;</span><span class="p">}</span>
+    <span class="p">}</span>
     <span class="p">)</span>
 </pre></div>
 </div>

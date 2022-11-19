@@ -18,3 +18,7 @@ testing and helps to maintain the reproducibility of experiments.
    api/mlexp
    changelog
    contributing
+
+.. sidebar-links::
+   :github:
+   :pypi: mlexp

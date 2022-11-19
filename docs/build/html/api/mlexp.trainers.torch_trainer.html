@@ -7,6 +7,10 @@
   <title>mlexp.trainers.torch_trainer &mdash; MLexp  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx-toolbox-code.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/sphinx-toolbox.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx_toolbox_installation.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -16,6 +20,8 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/sphinx_toolbox_installation.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -50,13 +56,20 @@
 <li class="toctree-l2 current"><a class="reference internal" href="mlexp.trainers.html">mlexp.trainers</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="mlexp.trainers.lgb_trainer.html">mlexp.trainers.lgb_trainer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="mlexp.trainers.sklearn_trainer.html">mlexp.trainers.sklearn_trainer</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">mlexp.trainers.torch_trainer</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">mlexp.trainers.torch_trainer</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mlexp.trainers.torch_trainer.TorchTrainer"><code class="docutils literal notranslate"><span class="pre">TorchTrainer</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Change Log</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to MLexp</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href=":pypi: https://pypi.org/project/mlexp/">:pypi: https://pypi.org/project/mlexp/</a></li>
 </ul>
 
         </div>
@@ -72,10 +85,10 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="mlexp.html">mlexp</a> &raquo;</li>
-          <li><a href="mlexp.trainers.html">mlexp.trainers</a> &raquo;</li>
-      <li>mlexp.trainers.torch_trainer</li>
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="mlexp.html">mlexp</a></li>
+          <li class="breadcrumb-item"><a href="mlexp.trainers.html">mlexp.trainers</a></li>
+      <li class="breadcrumb-item active">mlexp.trainers.torch_trainer</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/api/mlexp.trainers.torch_trainer.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -89,7 +102,7 @@
 <span id="mlexp-trainers-torch-trainer"></span><h1>mlexp.trainers.torch_trainer<a class="headerlink" href="#module-mlexp.trainers.torch_trainer" title="Permalink to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="mlexp.trainers.torch_trainer.TorchTrainer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlexp.trainers.torch_trainer.</span></span><span class="sig-name descname"><span class="pre">TorchTrainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nn_model_module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_loaders_module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics_callback_module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">saved_files_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_average_epochs_on_test_fold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimization_metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'metric_mean_cv'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mlexp.trainers.torch_trainer.TorchTrainer" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlexp.trainers.torch_trainer.</span></span><span class="sig-name descname"><span class="pre">TorchTrainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nn_model_module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_loaders_module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics_callback_module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">saved_files_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_average_epochs_on_test_fold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimization_metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'metric_mean_cv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mlexp/trainers/torch_trainer.html#TorchTrainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlexp.trainers.torch_trainer.TorchTrainer" title="Permalink to this definition"></a></dt>
 <dd><p>Training, logging and hyperparameters search for pytorch-lightning neural network.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>About training and hyperparameters optimization &mdash; MLexp  documentation</title>
+  <title>Overview: module code &mdash; MLexp  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/sphinx-toolbox-code.css" type="text/css" />
@@ -21,12 +20,11 @@
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/tabs.js"></script>
         <script src="../_static/sphinx_toolbox_installation.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="About params_func" href="params_func.html" />
-    <link rel="prev" title="Quick start" href="quick_start.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -48,21 +46,17 @@
 <li class="toctree-l1"><a class="reference internal" href="../index.html">About MLexp</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">User Guide</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="quick_start.html">Quick start</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">About training and hyperparameters optimization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="params_func.html">About params_func</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/mlexp.html">mlexp</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Change Log</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to MLexp</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Links</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference external" href=":pypi: https://pypi.org/project/mlexp/">:pypi: https://pypi.org/project/mlexp/</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/volico/mlexp">GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/mlexp">PyPI</a></li>
 </ul>
 
         </div>
@@ -79,10 +73,8 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a></li>
-          <li class="breadcrumb-item"><a href="index.html">User Guide</a></li>
-      <li class="breadcrumb-item active">About training and hyperparameters optimization</li>
+      <li class="breadcrumb-item active">Overview: module code</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/user_guide/features.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -90,29 +82,18 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="about-training-and-hyperparameters-optimization">
-<h1>About training and hyperparameters optimization<a class="headerlink" href="#about-training-and-hyperparameters-optimization" title="Permalink to this heading"></a></h1>
-<p>During training and hyperparameters optimization the following steps happen:</p>
-<ol class="arabic simple">
-<li><p>Models are trained with currently optimal hyperparameters on all but last folds from <em>cv</em></p></li>
-<li><p>After training models make prediction on test parts of corresponding validation folds</p></li>
-<li><p>Quality of predictions is assessed with <em>validation metric</em></p></li>
-<li><p>Obtained validation metrics are averaged</p></li>
-<li><p>One more model is trained with currently optimal hyperparameters, but now on test fold.</p></li>
-<li><p>Test model makes predictions on test part of test fold.</p></li>
-<li><p>Validation metrics, trained models and obtained metrics are logged to a server.</p></li>
-<li><p>Average validation metric is used as metric representing quality of current hyperparameters</p></li>
-<li><p>Optuna updates optimal hyperparameters and steps are repeated</p></li>
-</ol>
-</section>
-
+  <h1>All modules for which code is available</h1>
+<ul><li><a href="mlexp/inference/lgb_inference.html">mlexp.inference.lgb_inference</a></li>
+<li><a href="mlexp/inference/sklearn_inference.html">mlexp.inference.sklearn_inference</a></li>
+<li><a href="mlexp/inference/torch_inference.html">mlexp.inference.torch_inference</a></li>
+<li><a href="mlexp/trainers/lgb_trainer.html">mlexp.trainers.lgb_trainer</a></li>
+<li><a href="mlexp/trainers/sklearn_trainer.html">mlexp.trainers.sklearn_trainer</a></li>
+<li><a href="mlexp/trainers/torch_trainer.html">mlexp.trainers.torch_trainer</a></li>
+</ul>
 
            </div>
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="quick_start.html" class="btn btn-neutral float-left" title="Quick start" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="params_func.html" class="btn btn-neutral float-right" title="About params_func" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+          <footer>
 
   <hr/>
 
