@@ -28,6 +28,8 @@ jobs:
               - 'test/**'
               - 'requirements.txt'
               - 'requirements-dev.txt'
+            docs:
+              - 'docs/**'
       - name: Set up Python 3.9.*
         uses: actions/setup-python@v4
         with:
@@ -76,7 +78,7 @@ jobs:
       - name: Add test coverage report to job summary
         if: steps.filter.outputs.code == 'true'
         run: cat code-coverage-results.md >> $GITHUB_STEP_SUMMARY
-      - name: Test docs
-        if: steps.filter.outputs.code == 'false'
+      - name: Test only docs
+        if: (steps.filter.outputs.docs == 'true') && (steps.filter.outputs.code == 'false')
         run: |
           pytest tests/test_docs --neptune_project ${{ secrets.NEPTUNE_PROJECT }}
