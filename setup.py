@@ -8,7 +8,7 @@ with open("requirements.txt", encoding="utf-8-sig") as f:
     required = f.read().splitlines()
 
 setup(
-    name="mlexp",
+    name="mlexpTest",
     version=__version__,
     description="MLexp allows to train different types of machine learning models, \
                  optimize hyperparameters and log results with simple API",
