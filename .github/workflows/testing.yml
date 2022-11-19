@@ -26,7 +26,6 @@ jobs:
             code:
               - 'mlexp/**'
               - 'test/**'
-              - '.github/**'
               - 'requirements.txt'
               - 'requirements-dev.txt'
       - name: Set up Python 3.9.*
