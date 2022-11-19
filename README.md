@@ -22,4 +22,4 @@ Documentation is hosted on [Read the Docs](https://mlexp.readthedocs.io/en/lates
 
 ## Contributing
 
-For contributing guidelines check CONTRIBUTING.md
+For contributing guidelines check [CONTRIBUTING.md](CONTRIBUTING.md)
