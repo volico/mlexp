@@ -27,7 +27,7 @@ class TestDocs:
 
         if ("warning" in apidoc_out) | ("error" in apidoc_out):
             raise Exception(
-                "Errors or warnings were raised during running sphinx-apidoc command. Run docs/build_docs.sh to check for warnings/errors."
+                "Errors or warnings were raised during running sphinx-apidoc command. Run make build_docs to check for warnings/errors."
             )
 
     @pytest.mark.dependency(name="test_build", depends=["test_apidoc"])
@@ -40,13 +40,5 @@ class TestDocs:
         build_out = str(build_out)
         if ("warning" in build_out) | ("error" in build_out):
             raise Exception(
-                "Errors or warnings were raised during running sphinx-build command. Run docs/build_docs.sh to check for warnings/errors."
-            )
-
-        git_status = subprocess.run(["git", "status"], capture_output=True).stdout
-        git_status = str(git_status)
-
-        if ".html" in git_status:
-            raise Exception(
-                "Documentation was not updated. Update documentation and commit it."
+                "Errors or warnings were raised during running sphinx-build command. Run make build_docs to check for warnings/errors."
             )
