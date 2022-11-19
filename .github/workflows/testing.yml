@@ -78,6 +78,6 @@ jobs:
         if: steps.filter.outputs.code == 'true'
         run: cat code-coverage-results.md >> $GITHUB_STEP_SUMMARY
       - name: Test only docs
-        if: (steps.filter.outputs.docs == 'true') && (steps.filter.outputs.code == 'false')
+        if: steps.filter.outputs.docs == 'true' && steps.filter.outputs.code == 'false'
         run: |
           pytest tests/test_docs --neptune_project ${{ secrets.NEPTUNE_PROJECT }}
