@@ -35,7 +35,7 @@ According to this function:
 
 - *boosting* will be chosen from ['gbdt', 'dart', 'goss'] during hyperparameter optimization
 - *feature_fraction* will be chosen from uniform distribution from 0.01 to 1 during hyperparameter optimization
-- *min_child_samples* will be chosen itegers from 2 to 256 during hyperparameter optimization
+- *min_child_samples* will be chosen integers from 2 to 256 during hyperparameter optimization
 - no parameters will be passed to lightgbm.Dataset, except for *data* and *label*, which are passed from training data automatically
 
 Now we can use python API of mlexp.trainers.LgbTrainer to train model,

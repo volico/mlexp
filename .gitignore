@@ -11,3 +11,4 @@ lightning_logs
 *.egg-info
 .coverage
 /dist
+/docs/build
