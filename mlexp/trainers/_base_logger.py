@@ -3,7 +3,7 @@ import os
 import pickle
 import shutil
 from abc import ABC, abstractmethod
-from typing import Callable, Iterable, Literal
+from typing import Callable, Iterable, Literal, TypedDict
 
 import mlflow
 import neptune.new as neptune
@@ -42,14 +42,11 @@ class _BaseLogger(ABC):
         os.makedirs(r"{}/saved_utils/".format(saved_files_path))
 
     @abstractmethod
-    def _initiate_neptune_run(self, neptune_run_params, upload_files):
-        return
-
-    @abstractmethod
-    def _initiate_mlflow_run(
-        self, tracking_uri, experiment_name, mlflow_run_params, upload_files
-    ):
-        return
+    def _get_run_info(
+        self,
+    ) -> TypedDict("run_info", {"metadata": dict, "artifact_paths": list[str]}):
+        """Constructing dict with info to upload to the run."""
+        pass
 
     def init_run(
         self,
@@ -75,14 +72,32 @@ class _BaseLogger(ABC):
             run_id = self._base_initiate_neptune_run(
                 upload_files=upload_files, **run_params
             )
-            self._initiate_neptune_run(upload_files=upload_files, **run_params)
+            run_info = self._get_run_info()
+            if len(run_info["metadata"]) > 0:
+                for key, value in run_info["metadata"].items():
+                    self.run[key] = value
+
+            if len(run_info["artifact_paths"]) > 0:
+                for path in run_info["artifact_paths"]:
+                    self.run[path.split(self.saved_files_path)[-1]].upload(
+                        path, wait=True
+                    )
 
         elif logging_server == "mlflow":
 
             run_id = self._base_initiate_mlflow_run(
                 upload_files=upload_files, **run_params
             )
-            self._initiate_mlflow_run(upload_files=upload_files, **run_params)
+            run_info = self._get_run_info()
+            if len(run_info["metadata"]) > 0:
+                for key, value in run_info["metadata"].items():
+                    mlflow.log_param(key, value)
+
+            if len(run_info["artifact_paths"]) > 0:
+                for path in run_info["artifact_paths"]:
+                    mlflow.log_artifact(
+                        path, path.split(self.saved_files_path)[-1].split("/")[1]
+                    )
 
         return run_id
 

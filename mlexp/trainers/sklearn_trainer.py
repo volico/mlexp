@@ -1,8 +1,6 @@
-import os
 import pickle
-from typing import Callable, Iterable, Type
+from typing import Callable, Type, TypedDict
 
-import mlflow
 import numpy as np
 import sklearn
 from sklearn.metrics import make_scorer
@@ -45,49 +43,18 @@ class SklearnTrainer(_BaseTrainer, _BaseLogger):
 
         self.sklearn_estimator = sklearn_estimator
 
-    def _initiate_neptune_run(
-        self, neptune_run_params: dict, upload_files: Iterable[str] = []
-    ) -> None:
-        """Initiation of neptune run.
-
-        :param neptune_run_params: Neptune run parameters (will be passed to `neptune.init_run <https://docs.neptune.ai/api-reference/neptune#.init_run>`_).
-        :param upload_files: List of paths to files which will be logged in neptune run.
-        """
-
-        file_name = r"{}/saved_utils/sklearn_estimator.pickle".format(
-            self.saved_files_path
-        )
-        with open(file_name, "wb") as f:
-            pickle.dump(self.sklearn_estimator, f)
-        self.run[file_name.split(self.saved_files_path)[-1]].upload(
-            file_name, wait=True
-        )
-        os.remove(file_name)
-
-    def _initiate_mlflow_run(
+    def _get_run_info(
         self,
-        tracking_uri: str,
-        experiment_name: str,
-        mlflow_run_params: dict,
-        upload_files: Iterable[str] = [],
-    ) -> None:
-        """Initiation of mlflow run.
+    ) -> TypedDict("run_info", {"metadata": dict, "artifact_paths": list[str]}):
+        """Constructing dict with info to upload to the run."""
 
-        :param tracking_uri: URI of mlflow server (will be passed to `mlflow.set_tracking_uri <https://www.mlflow.org/docs/latest/python_api/mlflow.html#mlflow.set_tracking_uri>`_).
-        :param experiment_name: Name of mlflow experiment for logging (will be passed to `mlflow.set_experiment <https://www.mlflow.org/docs/latest/python_api/mlflow.html#mlflow.set_experiment>`_)
-        :param mlflow_run_params: Mlflow run parameters (will be passed to `mlflow.start_run <https://www.mlflow.org/docs/latest/python_api/mlflow.html#mlflow.start_run>`_).
-        :param upload_files: List of paths to files which will be logged in mlflow run.
-        """
-
-        file_name = r"{}/saved_utils/sklearn_estimator.pickle".format(
+        sklearn_estimator_file_name = r"{}/saved_utils/sklearn_estimator.pickle".format(
             self.saved_files_path
         )
-        with open(file_name, "wb") as f:
+        with open(sklearn_estimator_file_name, "wb") as f:
             pickle.dump(self.sklearn_estimator, f)
-        mlflow.log_artifact(
-            file_name, file_name.split(self.saved_files_path)[-1].split("/")[1]
-        )
-        os.remove(file_name)
+
+        return {"metadata": {}, "artifact_paths": [sklearn_estimator_file_name]}
 
     def _run_iteration(self, X, y, cv, params, trial_number):
         """Train, evaluate scikit-learn model with defined parameters and log metrics.
