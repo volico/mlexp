@@ -4,7 +4,6 @@ import types
 from types import ModuleType
 from typing import Callable, Iterable, TypedDict
 
-
 import numpy as np
 import pytorch_lightning as pl
 
