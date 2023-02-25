@@ -7,6 +7,9 @@ with open("README.md", "r") as f:
 with open("requirements.txt", encoding="utf-8-sig") as f:
     required = f.read().splitlines()
 
+with open("requirements-extra.txt", encoding="utf-8-sig") as f:
+    required_extra = f.read().splitlines()
+
 setup(
     name="mlexp",
     version=__version__,
@@ -34,5 +37,6 @@ setup(
         "Programming Language :: Python :: 3.9",
     ],
     install_requires=required,
+    extras_require={"torch": required_extra},
     project_urls={"GitHub": "https://github.com/volico/mlexp"},
 )
