@@ -33,7 +33,7 @@ def LGB_fixed_params_func(trial):
 def Sklearn_search_params_func(trial):
     return {
         "model_params": {
-            "random_state": 1230011199988,
+            "random_state": 1230011199,
             "max_iter": 200,
             "alpha": trial.suggest_float("alpha", 0.01, 1),
         },
@@ -42,7 +42,7 @@ def Sklearn_search_params_func(trial):
 
 def Sklearn_fixed_params_func(trial):
     return {
-        "model_params": {"random_state": 1230011199988, "max_iter": 200, "alpha": 0.1},
+        "model_params": {"random_state": 1230011199, "max_iter": 200, "alpha": 0.1},
     }
 
 
