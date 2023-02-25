@@ -1,7 +1,8 @@
 import mlflow
 import optuna
 import pytest
-from mlexp.trainers import LgbTrainer, SklearnTrainer, TorchTrainer
+from mlexp.trainers import LgbTrainer, SklearnTrainer
+from mlexp.trainers.torch_trainer import TorchTrainer
 from sklearn.linear_model import Ridge
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
@@ -74,7 +75,6 @@ class TestTrainer:
         direction,
         optimization_metric,
     ):
-
         return TRAINERS[trainer_name](
             validation_metric=validation_metric,
             direction=direction,

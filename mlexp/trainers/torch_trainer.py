@@ -2,9 +2,8 @@ import inspect
 import os
 import types
 from types import ModuleType
-from typing import Callable, Iterable
+from typing import Callable, Iterable, TypedDict
 
-import mlflow
 import numpy as np
 import pytorch_lightning as pl
 
@@ -77,106 +76,46 @@ class TorchTrainer(_BaseTrainer, _BaseLogger):
         self.use_average_epochs_on_test_fold = use_average_epochs_on_test_fold
         os.makedirs(r"{}/saved_metric_curves/".format(saved_files_path))
 
-    def _initiate_neptune_run(
-        self, neptune_run_params: dict, upload_files: Iterable[str] = []
-    ) -> None:
-        """Initiation of neptune run.
-
-        :param neptune_run_params: Neptune run parameters (will be passed to `neptune.init_run <https://docs.neptune.ai/api-reference/neptune#.init_run>`_).
-        :param upload_files: List of paths to files which will be logged in neptune run.
-        """
-
-        self.run[
-            "use_average_epochs_on_test_fold"
-        ] = self.use_average_epochs_on_test_fold
-
-        nn_model_module_code_lines = inspect.getsource(self.nn_model_module)
-        file_name = r"{}/saved_utils/nn_model_module.py".format(self.saved_files_path)
-        with open(file_name, "w") as f:
-            f.write(nn_model_module_code_lines)
-        self.run[file_name.split(self.saved_files_path)[-1]].upload(
-            file_name, wait=True
-        )
-        os.remove(file_name)
-
-        data_loaders_module_code_lines = inspect.getsource(self.data_loaders_module)
-        file_name = r"{}/saved_utils/data_loaders_module.py".format(
-            self.saved_files_path
-        )
-        with open(file_name, "w") as f:
-            f.write(data_loaders_module_code_lines)
-        self.run[file_name.split(self.saved_files_path)[-1]].upload(
-            file_name, wait=True
-        )
-        os.remove(file_name)
-
-        metrics_callback_module_code_lines = inspect.getsource(
-            self.metrics_callback_module
-        )
-        file_name = r"{}/saved_utils/metrics_callback_module.py".format(
-            self.saved_files_path
-        )
-        with open(file_name, "w") as f:
-            f.write(metrics_callback_module_code_lines)
-        self.run[file_name.split(self.saved_files_path)[-1]].upload(
-            file_name, wait=True
-        )
-        os.remove(file_name)
-
-    def _initiate_mlflow_run(
+    def _get_run_info(
         self,
-        tracking_uri: str,
-        experiment_name: str,
-        mlflow_run_params: dict,
-        upload_files: Iterable[str] = [],
-    ) -> None:
-        """Initiation of mlflow run.
-
-        :param tracking_uri: URI of mlflow server (will be passed to `mlflow.set_tracking_uri <https://www.mlflow.org/docs/latest/python_api/mlflow.html#mlflow.set_tracking_uri>`_).
-        :param experiment_name: Name of mlflow experiment for logging (will be passed to `mlflow.set_experiment <https://www.mlflow.org/docs/latest/python_api/mlflow.html#mlflow.set_experiment>`_)
-        :param mlflow_run_params: Mlflow run parameters (will be passed to `mlflow.start_run <https://www.mlflow.org/docs/latest/python_api/mlflow.html#mlflow.start_run>`_).
-        :param upload_files: List of paths to files which will be logged in neptune run.
-        """
-
-        mlflow.log_param(
-            "use_average_epochs_on_test_fold", self.use_average_epochs_on_test_fold
-        )
+    ) -> TypedDict("run_info", {"metadata": dict, "artifact_paths": list[str]}):
+        """Constructing dict with info to upload to the run."""
 
         nn_model_module_code_lines = inspect.getsource(self.nn_model_module)
-        file_name = r"{}/saved_utils/nn_model_module.py".format(self.saved_files_path)
-        with open(file_name, "w") as f:
-            f.write(nn_model_module_code_lines)
-        mlflow.log_artifact(
-            file_name, file_name.split(self.saved_files_path)[-1].split("/")[1]
-        )
-        os.remove(file_name)
-
-        data_loaders_module_code_lines = inspect.getsource(self.data_loaders_module)
-        file_name = r"{}/saved_utils/data_loaders_module.py".format(
+        nn_model_file_name = r"{}/saved_utils/nn_model_module.py".format(
             self.saved_files_path
         )
-        with open(file_name, "w") as f:
-            f.write(data_loaders_module_code_lines)
-        mlflow.log_artifact(
-            file_name, file_name.split(self.saved_files_path)[-1].split("/")[1]
+        with open(nn_model_file_name, "w") as f:
+            f.write(nn_model_module_code_lines)
+
+        data_loaders_module_code_lines = inspect.getsource(self.data_loaders_module)
+        data_loaders_file_name = r"{}/saved_utils/data_loaders_module.py".format(
+            self.saved_files_path
         )
-        os.remove(file_name)
+        with open(data_loaders_file_name, "w") as f:
+            f.write(data_loaders_module_code_lines)
 
         metrics_callback_module_code_lines = inspect.getsource(
             self.metrics_callback_module
         )
-        file_name = r"{}/saved_utils/metrics_callback_module.py".format(
-            self.saved_files_path
+        metrics_callback_file_name = (
+            r"{}/saved_utils/metrics_callback_module.py".format(self.saved_files_path)
         )
-        with open(file_name, "w") as f:
+        with open(metrics_callback_file_name, "w") as f:
             f.write(metrics_callback_module_code_lines)
-        mlflow.log_artifact(
-            file_name, file_name.split(self.saved_files_path)[-1].split("/")[1]
-        )
-        os.remove(file_name)
+
+        return {
+            "metadata": {
+                "use_average_epochs_on_test_fold": self.use_average_epochs_on_test_fold
+            },
+            "artifact_paths": [
+                nn_model_file_name,
+                data_loaders_file_name,
+                metrics_callback_file_name,
+            ],
+        }
 
     def _train_model(self, X, y, fold, params):
-
         metrics_callback = self.metrics_callback_module.MetricsCallback()
         train_loader, val_loader = self.data_loaders_module.train_val_data_loaders(
             X, y, fold, **params["data_loaders_params"]
@@ -229,7 +168,6 @@ class TorchTrainer(_BaseTrainer, _BaseLogger):
         initial_max_epoches = params["trainer_params"]["max_epochs"]
 
         for fold_num, fold in enumerate(cv):
-
             if fold_num == len(cv) - 1:
                 fold_num = "test"
                 if self.use_average_epochs_on_test_fold == True:

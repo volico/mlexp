@@ -1,5 +1,5 @@
 import os
-from typing import Callable, Iterable
+from typing import Callable, Iterable, TypedDict
 
 import lightgbm as lgb
 import mlflow
@@ -49,44 +49,21 @@ class LgbTrainer(_BaseTrainer, _BaseLogger):
         )
         os.makedirs(r"{}/saved_metric_curves/".format(saved_files_path))
 
-    def _initiate_neptune_run(
-        self, neptune_run_params: dict, upload_files: Iterable[str] = []
-    ) -> None:
-        """Initiation of neptune run.
-
-        :param neptune_run_params: Neptune run parameters (will be passed to `neptune.init_run <https://docs.neptune.ai/api-reference/neptune#.init_run>`_).
-        :param upload_files: List of paths to files which will be logged in neptune run.
-        """
-
-        self.run[
-            "use_average_n_estimators_on_test_fold"
-        ] = self.use_average_n_estimators_on_test_fold
-
-    def _initiate_mlflow_run(
+    def _get_run_info(
         self,
-        tracking_uri: str,
-        experiment_name: str,
-        mlflow_run_params: dict,
-        upload_files: Iterable[str] = [],
-    ) -> None:
-        """Initiation of mlflow run.
-
-        :param tracking_uri: URI of mlflow server (will be passed to `mlflow.set_tracking_uri <https://www.mlflow.org/docs/latest/python_api/mlflow.html#mlflow.set_tracking_uri>`_).
-        :param experiment_name: Name of mlflow experiment for logging (will be passed to `mlflow.set_experiment <https://www.mlflow.org/docs/latest/python_api/mlflow.html#mlflow.set_experiment>`_)
-        :param mlflow_run_params: Mlflow run parameters (will be passed to `mlflow.start_run <https://www.mlflow.org/docs/latest/python_api/mlflow.html#mlflow.start_run>`_).
-        :param upload_files: List of paths to files which will be logged in neptune run.
-        """
-
-        mlflow.log_param(
-            "use_average_n_estimators_on_test_fold",
-            self.use_average_n_estimators_on_test_fold,
-        )
+    ) -> TypedDict("run_info", {"metadata": dict, "artifact_paths": list[str]}):
+        """Constructing dict with info to upload to the run."""
+        return {
+            "metadata": {
+                "use_average_n_estimators_on_test_fold": self.use_average_n_estimators_on_test_fold
+            },
+            "artifact_paths": [],
+        }
 
     def _scoring_wrapper(self, validation_metric, direction):
         def lgb_scoring(
             y_hat, data, validation_metric=validation_metric, direction=direction
         ):
-
             y_true = data.get_label()
 
             if direction == "maximize":
@@ -98,7 +75,6 @@ class LgbTrainer(_BaseTrainer, _BaseLogger):
         return lgb_scoring
 
     def _train_validation(self, X, y, params, cv, lgb_scoring):
-
         train_data = lgb.Dataset(X, y, **params["lgb_data_set_params"])
         validation_results = lgb.cv(
             params=params["model_params"],
@@ -121,7 +97,6 @@ class LgbTrainer(_BaseTrainer, _BaseLogger):
         )
 
     def _train_test(self, X, y, params, cv, lgb_scoring):
-
         X_train = X[cv[-1][0], :]
         y_train = y[cv[-1][0]]
         X_test = X[cv[-1][1], :]

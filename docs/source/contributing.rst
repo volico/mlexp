@@ -62,7 +62,7 @@ To run tests:
 
 .. code-block:: bash
 
-    make test <neptune user/neptune project>
+    make test neptune_project=<neptune user/neptune project>
 
 Minimum code coverage is 75%
 

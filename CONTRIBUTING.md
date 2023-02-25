@@ -48,7 +48,7 @@ Neptune project is also required (check pytest args for more details)
 
 To run tests:
 ```bash
-$ make test <neptune user/neptune project>
+$ make test neptune_project=<neptune user/neptune project>
 ```
 
 Minimum code coverage is 75%

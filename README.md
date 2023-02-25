@@ -12,9 +12,19 @@ hypothesis testing and helps to maintain the reproducibility of experiments.
 $ pip install mlexp
 ```
 
-To support training on pytorch models gpu, before installation of MLexps you 
-have to install torch of version compatible with installed pytorch_lightning 
-with support of gpu.
+By default, MLexp is installed without support of torch training.
+
+To support training torch models install MLexp as:
+
+```bash
+$ pip install mlexp[torch]
+```
+
+This way [pytorch-lightning](https://github.com/Lightning-AI/lightning) will also be installed.
+
+It is advised to install desired version of torch before installing mlexp[torch]
+because pytorch-lightning depends on torch and by default downloads 
+torch with CUDA support (and heavy dependencies).
 
 ## Documentation
 

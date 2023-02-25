@@ -1,6 +1,7 @@
 import pytest
 
-from mlexp.inference import LgbInference, SklearnInference, TorchInference
+from mlexp.inference import LgbInference, SklearnInference
+from mlexp.inference.torch_inference import TorchInference
 
 from tests.test_inference.utils import server_auth
 

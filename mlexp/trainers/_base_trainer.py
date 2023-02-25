@@ -96,7 +96,6 @@ class _BaseTrainer(ABC):
     def _run_iteration(
         self, X: np.ndarray, y: np.ndarray, cv: list, params: dict, trial_number: int
     ) -> dict:
-
         return
 
     def _objective(self, trial, X, y, cv, params_func):
