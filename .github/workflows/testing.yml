@@ -36,6 +36,7 @@ jobs:
         uses: omnilib/ufmt@action-v1
         with:
           path: .
+          version: 2.0.1
       - name: Install dependencies
         if: (steps.filter.outputs.docs == 'true') || (steps.filter.outputs.code == 'true')
         run: |
