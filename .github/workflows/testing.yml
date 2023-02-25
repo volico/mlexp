@@ -26,6 +26,8 @@ jobs:
               - 'test/**'
               - 'requirements.txt'
               - 'requirements-dev.txt'
+              - 'requirements-extra.txt'
+              - 'setup.py'
             docs:
               - 'docs/**'
       - name: Set up Python 3.9.*
