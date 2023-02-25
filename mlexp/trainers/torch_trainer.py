@@ -116,7 +116,6 @@ class TorchTrainer(_BaseTrainer, _BaseLogger):
         }
 
     def _train_model(self, X, y, fold, params):
-
         metrics_callback = self.metrics_callback_module.MetricsCallback()
         train_loader, val_loader = self.data_loaders_module.train_val_data_loaders(
             X, y, fold, **params["data_loaders_params"]
@@ -169,7 +168,6 @@ class TorchTrainer(_BaseTrainer, _BaseLogger):
         initial_max_epoches = params["trainer_params"]["max_epochs"]
 
         for fold_num, fold in enumerate(cv):
-
             if fold_num == len(cv) - 1:
                 fold_num = "test"
                 if self.use_average_epochs_on_test_fold == True:

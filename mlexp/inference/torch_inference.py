@@ -133,7 +133,6 @@ class TorchInference(_BaseModelInference):
         ).MetricsCallback
 
         if trained_model:
-
             weigths_args_path = self.server_inference.get_file(
                 r"saved_models/model_trial_{}_fold_{}.ckpt".format(step, fold_num),
                 r"{}/downloaded_models/model_trial_{}_fold_{}.ckpt".format(
@@ -171,7 +170,6 @@ class TorchInference(_BaseModelInference):
             ] = initial_max_epoches
 
         else:
-
             self.downloaded_params["model"] = self.downloaded_params["nn_model"](
                 **{
                     **self.downloaded_params["params"]["model_params"],

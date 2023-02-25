@@ -68,7 +68,6 @@ class _BaseLogger(ABC):
         """
 
         if logging_server == "neptune":
-
             run_id = self._base_initiate_neptune_run(
                 upload_files=upload_files, **run_params
             )
@@ -84,7 +83,6 @@ class _BaseLogger(ABC):
                     )
 
         elif logging_server == "mlflow":
-
             run_id = self._base_initiate_mlflow_run(
                 upload_files=upload_files, **run_params
             )
@@ -102,7 +100,6 @@ class _BaseLogger(ABC):
         return run_id
 
     def _base_initiate_neptune_run(self, neptune_run_params, upload_files=[]):
-
         self.run = neptune.init(**neptune_run_params, run=None)
         self.run["direction"] = self.direction
         self.run["model_type"] = self.model_type
@@ -135,7 +132,6 @@ class _BaseLogger(ABC):
         tracking_uri=None,
         mlflow_run_params=None,
     ):
-
         mlflow.set_tracking_uri(tracking_uri)
         mlflow.set_experiment(experiment_name)
         self.run = mlflow.start_run(**mlflow_run_params)
@@ -164,17 +160,14 @@ class _BaseLogger(ABC):
         return self.run.info.run_id
 
     def _log_metrics_neptune(self, metrics_dict, trial):
-
         for metric in metrics_dict.keys():
             self.run[metric].log(metrics_dict[metric])
 
     def _log_metrics_mlflow(self, metrics_dict, trial):
-
         for metric in metrics_dict.keys():
             mlflow.log_metric(metric, metrics_dict[metric], step=trial.number)
 
     def _log_metrics(self, metrics_dict, trial):
-
         if self.logging_server == "neptune":
             self._log_metrics_neptune(metrics_dict, trial)
 
@@ -182,11 +175,9 @@ class _BaseLogger(ABC):
             self._log_metrics_mlflow(metrics_dict, trial)
 
     def _log_params_neptune(self, params):
-
         self.run["params"].log(params)
 
     def _log_params_mlflow(self, params):
-
         try:
             mlflow.tracking.MlflowClient().download_artifacts(
                 self.run.info.run_uuid,
@@ -204,7 +195,6 @@ class _BaseLogger(ABC):
         mlflow.log_dict(params_logged, "params.json")
 
     def _log_params(self, params):
-
         if self.logging_server == "neptune":
             self._log_params_neptune(params)
 
@@ -226,7 +216,6 @@ class _BaseLogger(ABC):
             os.remove(file_path)
 
     def _log_files(self, file_paths):
-
         if self.logging_server == "neptune":
             self._log_files_neptune(file_paths)
         elif self.logging_server == "mlflow":

@@ -68,7 +68,6 @@ class _NeptuneInference(_BaseServerInference):
                 )
 
             except:
-
                 return (direction, model_type, validation_metric)
 
     def get_best_step(self, direction: str, metric: str) -> int:
@@ -136,5 +135,4 @@ class _NeptuneInference(_BaseServerInference):
         return download_file_path
 
     def stop(self):
-
         self.run.stop()
