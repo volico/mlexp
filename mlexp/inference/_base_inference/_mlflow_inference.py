@@ -13,7 +13,6 @@ class _MlflowInference(_BaseServerInference):
     """Base class for inference from mlflow."""
 
     def __init__(self, run_params: dict, downloaded_files_path):
-
         self.run_id = run_params["run_id"]
         self.mlflow_client = mlflow.tracking.MlflowClient(run_params["tracking_uri"])
         super().__init__(downloaded_files_path)
@@ -66,7 +65,6 @@ class _MlflowInference(_BaseServerInference):
                 )
 
             except:
-
                 return (direction, model_type, validation_metric)
 
     def get_best_step(self, direction: str, metric: str) -> int:
@@ -160,5 +158,4 @@ class _MlflowInference(_BaseServerInference):
         return file_path
 
     def stop(self):
-
         pass

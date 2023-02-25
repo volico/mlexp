@@ -74,7 +74,6 @@ class TestTrainer:
         direction,
         optimization_metric,
     ):
-
         return TRAINERS[trainer_name](
             validation_metric=validation_metric,
             direction=direction,

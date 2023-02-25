@@ -64,7 +64,6 @@ class LgbTrainer(_BaseTrainer, _BaseLogger):
         def lgb_scoring(
             y_hat, data, validation_metric=validation_metric, direction=direction
         ):
-
             y_true = data.get_label()
 
             if direction == "maximize":
@@ -76,7 +75,6 @@ class LgbTrainer(_BaseTrainer, _BaseLogger):
         return lgb_scoring
 
     def _train_validation(self, X, y, params, cv, lgb_scoring):
-
         train_data = lgb.Dataset(X, y, **params["lgb_data_set_params"])
         validation_results = lgb.cv(
             params=params["model_params"],
@@ -99,7 +97,6 @@ class LgbTrainer(_BaseTrainer, _BaseLogger):
         )
 
     def _train_test(self, X, y, params, cv, lgb_scoring):
-
         X_train = X[cv[-1][0], :]
         y_train = y[cv[-1][0]]
         X_test = X[cv[-1][1], :]
