@@ -13,7 +13,8 @@ sdist: clean reqs
 	python setup.py sdist
 
 .PHONY: build_docs
-build_docs: clean install dev_reqs
+build_docs: clean dev_reqs
+	pip install .[torch]
 	sphinx-apidoc -f --no-toc --templatedir=docs/source/_templates -e -o docs/source/api mlexp
 	sphinx-build -M html docs/source docs/build
 	python setup.py clean --all

@@ -26,6 +26,8 @@ jobs:
               - 'test/**'
               - 'requirements.txt'
               - 'requirements-dev.txt'
+              - 'requirements-extra.txt'
+              - 'setup.py'
             docs:
               - 'docs/**'
       - name: Set up Python 3.9.*
@@ -41,7 +43,7 @@ jobs:
         if: (steps.filter.outputs.docs == 'true') || (steps.filter.outputs.code == 'true')
         run: |
           python -m pip install --upgrade pip
-          pip install .
+          pip install .[torch]
           pip install -r requirements-dev.txt
       - name: Start mlflow server
         if: steps.filter.outputs.code == 'true'
