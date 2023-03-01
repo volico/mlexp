@@ -10,7 +10,7 @@ import optuna
 class _BaseTrainer(ABC):
     """Base class for all trainers."""
 
-    def __int__(
+    def __init__(
         self, direction: str, saved_files_path: str, optimization_metric: str, kwargs
     ):
         """

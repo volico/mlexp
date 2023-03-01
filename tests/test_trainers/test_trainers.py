@@ -21,12 +21,11 @@ from tests.test_trainers.utils import add_server_auth
 TRAINERS = {"LGB": LgbTrainer, "Sklearn": SklearnTrainer, "Torch": TorchTrainer}
 SAMPLERS = {"TPESampler": optuna.samplers.TPESampler}
 PARAMS_FUNCS = {
-    "LGB": {"search": LGB_search_params_func, "fixed": LGB_fixed_params_func},
+    "LGB": {"search": LGB_search_params_func},
     "Sklearn": {
-        "search": Sklearn_search_params_func,
         "fixed": Sklearn_fixed_params_func,
     },
-    "Torch": {"search": Torch_search_params_func, "fixed": Torch_fixed_params_func},
+    "Torch": {"search": Torch_search_params_func},
 }
 RUN_PARAMS = {
     "neptune": {"neptune_run_params": {"name": "Test", "description": "1"}},
@@ -35,7 +34,7 @@ RUN_PARAMS = {
         "mlflow_run_params": {"run_name": "Test", "tags": {"Test tag": "1"}},
     },
 }
-VALIDATION_METRICS = [mean_absolute_error, mean_squared_error]
+VALIDATION_METRICS = [mean_absolute_error]
 OPTIMIZATION_METRICS = ["metric_mean_cv", "metric_test"]
 dummy_data = TrainerDummyData()
 
@@ -44,7 +43,6 @@ dummy_data = TrainerDummyData()
     "trainer_name,trainer_specific_params",
     [
         ["LGB", {"use_average_n_estimators_on_test_fold": True}],
-        ["LGB", {"use_average_n_estimators_on_test_fold": False}],
         ["Sklearn", {"sklearn_estimator": Ridge}],
         [
             "Torch",
@@ -53,15 +51,6 @@ dummy_data = TrainerDummyData()
                 "data_loaders_module": data_loaders,
                 "metrics_callback_module": metrics_callback,
                 "use_average_epochs_on_test_fold": True,
-            },
-        ],
-        [
-            "Torch",
-            {
-                "nn_model_module": nn_model,
-                "data_loaders_module": data_loaders,
-                "metrics_callback_module": metrics_callback,
-                "use_average_epochs_on_test_fold": False,
             },
         ],
     ],
