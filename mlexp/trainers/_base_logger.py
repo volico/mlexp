@@ -41,6 +41,8 @@ class _BaseLogger(ABC):
         os.makedirs(r"{}/saved_studies/".format(saved_files_path))
         os.makedirs(r"{}/saved_utils/".format(saved_files_path))
 
+        super().__init__()
+
     @abstractmethod
     def _get_run_info(
         self,

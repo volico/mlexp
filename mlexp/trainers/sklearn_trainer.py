@@ -34,10 +34,10 @@ class SklearnTrainer(_BaseTrainer, _BaseLogger):
         assert isinstance(validation_metric, Callable)
 
         super().__init__(
-            direction,
-            saved_files_path,
-            optimization_metric,
-            validation_metric,
+            direction=direction,
+            saved_files_path=saved_files_path,
+            optimization_metric=optimization_metric,
+            validation_metric=validation_metric,
             model_type="sklearn",
         )
 
