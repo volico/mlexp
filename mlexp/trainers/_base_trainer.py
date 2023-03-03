@@ -11,7 +11,7 @@ class _BaseTrainer(ABC):
     """Base class for all trainers."""
 
     def __init__(
-        self, direction: str, saved_files_path: str, optimization_metric: str, kwargs
+        self, direction: str, saved_files_path: str, optimization_metric: str, **kwargs
     ):
         """
         :param direction: Direction of optimization.
@@ -22,6 +22,13 @@ class _BaseTrainer(ABC):
         self.direction = direction
         self.saved_files_path = saved_files_path
         self.optimization_metric = optimization_metric
+
+        super().__init__(
+            direction=direction,
+            saved_files_path=saved_files_path,
+            optimization_metric=optimization_metric,
+            **kwargs
+        )
 
     def train(
         self,
