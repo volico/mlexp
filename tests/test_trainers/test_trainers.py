@@ -23,7 +23,7 @@ SAMPLERS = {"TPESampler": optuna.samplers.TPESampler}
 PARAMS_FUNCS = {
     "LGB": {"search": LGB_search_params_func},
     "Sklearn": {
-        "fixed": Sklearn_fixed_params_func,
+        "search": Sklearn_search_params_func,
     },
     "Torch": {"search": Torch_search_params_func},
 }
@@ -115,7 +115,7 @@ class TestTrainer:
     @pytest.mark.parametrize("logging_server", list(RUN_PARAMS.keys()))
     @pytest.mark.parametrize("sampler_name", list(SAMPLERS.keys()))
     @pytest.mark.parametrize("n_trials", [1, 3])
-    @pytest.mark.parametrize("search_hparams", ["search", "fixed"])
+    @pytest.mark.parametrize("search_hparams", ["search"])
     @pytest.mark.parametrize("validation_metric", VALIDATION_METRICS)
     @pytest.mark.parametrize("direction", ["maximize", "minimize"])
     @pytest.mark.parametrize("optimization_metric", OPTIMIZATION_METRICS)
