@@ -1,4 +1,4 @@
-name: Testing
+name: Pull request linting and testing
 
 on:
   push:
@@ -11,7 +11,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  test:
+  lint:
 
     runs-on: ubuntu-latest
 
@@ -34,28 +34,58 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.9.*"
-      - name: Check formatting
+      - name: Linting with ufmt
         uses: omnilib/ufmt@action-v1
         with:
           path: .
           version: 2.0.1
-      - name: Install dependencies
-        if: (steps.filter.outputs.docs == 'true') || (steps.filter.outputs.code == 'true')
+
+  find_changes:
+
+    runs-on: ubuntu-latest
+    outputs:
+      code: ${{ steps.filter.outputs.code }}
+      docs: ${{ steps.filter.outputs.code }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            code:
+              - 'mlexp/**'
+              - 'test/**'
+              - 'requirements.txt'
+              - 'requirements-dev.txt'
+              - 'requirements-extra.txt'
+              - 'setup.py'
+            docs:
+              - 'docs/**'
+
+  test:
+
+    runs-on: ubuntu-latest
+    needs: [find_changes]
+    if: needs.find_changes.outputs.code == 'true'
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.9.*
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9.*"
+      - name: Installing dependencies
         run: |
           python -m pip install --upgrade pip
           pip install .[torch]
           pip install -r requirements-dev.txt
-      - name: Start mlflow server
-        if: steps.filter.outputs.code == 'true'
+      - name: Preparing for testing (starting mlflow server, setting neptune api token)
         run: |
           mlflow server &
-          sleep 30s
-      - name: Setting neptune api token
-        if: steps.filter.outputs.code == 'true'
-        run: |
+          sleep 10s
           echo "NEPTUNE_API_TOKEN=${{ secrets.NEPTUNE_API_TOKEN }}" >> $GITHUB_ENV
-      - name: Test code and docs
-        if: steps.filter.outputs.code == 'true'
+      - name: Testing code and docs
         run: |
           coverage run -m pytest --neptune_project ${{ secrets.NEPTUNE_PROJECT }}
           coverage xml -i
@@ -73,14 +103,34 @@ jobs:
           output: 'both'
       - name: Add test coverage report to PR comments
         uses: marocchino/sticky-pull-request-comment@v2
-        if: github.event_name == 'pull_request' && steps.filter.outputs.code == 'true'
+        if: github.event_name == 'pull_request'
         with:
           recreate: true
           path: code-coverage-results.md
       - name: Add test coverage report to job summary
-        if: steps.filter.outputs.code == 'true'
         run: cat code-coverage-results.md >> $GITHUB_STEP_SUMMARY
       - name: Test only docs
         if: steps.filter.outputs.docs == 'true' && steps.filter.outputs.code == 'false'
+        run: |
+          pytest tests/test_docs --neptune_project ${{ secrets.NEPTUNE_PROJECT }}
+
+  test_docs:
+
+    runs-on: ubuntu-latest
+    needs: [find_changes]
+    if: needs.find_changes.outputs.code == 'false' && needs.find_changes.outputs.docs == 'true'
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.9.*
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9.*"
+      - name: Installing dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install .[torch]
+          pip install -r requirements-dev.txt
+      - name: Test only docs
         run: |
           pytest tests/test_docs --neptune_project ${{ secrets.NEPTUNE_PROJECT }}
