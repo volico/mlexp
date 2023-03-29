@@ -28,12 +28,10 @@ def logging_server_auth(request):
 @pytest.fixture(scope="module", autouse=True)
 def neptune_run_params(request):
     return {
-        "neptune_run_params": {
             "project": request.config.getoption("--neptune_project"),
             "name": "Test",
             "description": "1",
         }
-    }
 
 
 @pytest.fixture(scope="module", autouse=True)
@@ -41,5 +39,5 @@ def mlflow_run_params(request):
     return {
         "experiment_name": "tests",
         "tracking_uri": request.config.getoption("--mlflow_tracking_uri"),
-        "mlflow_run_params": {"run_name": "Test", "tags": {"Test tag": "1"}},
+        "start_run_params": {"run_name": "Test", "tags": {"Test tag": "1"}},
     }

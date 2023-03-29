@@ -28,10 +28,10 @@ PARAMS_FUNCS = {
     "Torch": {"search": Torch_search_params_func},
 }
 RUN_PARAMS = {
-    "neptune": {"neptune_run_params": {"name": "Test", "description": "1"}},
+    "neptune": {"name": "Test", "description": "1"},
     "mlflow": {
         "experiment_name": "tests",
-        "mlflow_run_params": {"run_name": "Test", "tags": {"Test tag": "1"}},
+        "start_run_params": {"run_name": "Test", "tags": {"Test tag": "1"}},
     },
 }
 VALIDATION_METRICS = [mean_absolute_error]
@@ -106,11 +106,8 @@ class TestTrainer:
 
         trainer.init_run(logging_server, upload_files, **run_params)
 
-        if logging_server == "neptune":
-            trainer.run.stop()
 
-        elif logging_server == "mlflow":
-            mlflow.end_run()
+        trainer.stop_run()
 
     @pytest.mark.parametrize("logging_server", list(RUN_PARAMS.keys()))
     @pytest.mark.parametrize("sampler_name", list(SAMPLERS.keys()))
