@@ -68,7 +68,15 @@ class _Logger(ABC):
         elif logging_server == "mlflow":
             self.logger = MLFlowLogger(self.saved_files_path)
 
-        return self.logger.init_run(self.direction, self.optimization_metric, self.validation_metric, self.model_type, upload_files, run_params, self._get_run_info())
+        return self.logger.init_run(
+            self.direction,
+            self.optimization_metric,
+            self.validation_metric,
+            self.model_type,
+            upload_files,
+            run_params,
+            self._get_run_info(),
+        )
 
     def log_metrics(self, metrics_dict, trial):
         self.logger.log_metrics(metrics_dict, trial)
@@ -95,7 +103,16 @@ class LoggerStrategy(ABC):
         self.saved_files_path = saved_files_path
 
     @abstractmethod
-    def init_run(self, direction, optimization_metric, validation_metric, model_type, upload_files: Iterable[str], run_params, model_info) -> str:
+    def init_run(
+        self,
+        direction,
+        optimization_metric,
+        validation_metric,
+        model_type,
+        upload_files: Iterable[str],
+        run_params,
+        model_info,
+    ) -> str:
         pass
 
     @abstractmethod
@@ -116,7 +133,16 @@ class LoggerStrategy(ABC):
 
 
 class NeptuneLogger(LoggerStrategy):
-    def init_run(self, direction, optimization_metric, validation_metric, model_type, upload_files: Iterable[str], run_params, model_info) -> str:
+    def init_run(
+        self,
+        direction,
+        optimization_metric,
+        validation_metric,
+        model_type,
+        upload_files: Iterable[str],
+        run_params,
+        model_info,
+    ) -> str:
         self.run = neptune.init(**run_params, run=None)
         self.run["direction"] = direction
         self.run["model_type"] = model_type
@@ -144,9 +170,7 @@ class NeptuneLogger(LoggerStrategy):
 
         if len(model_info["artifact_paths"]) > 0:
             for path in model_info["artifact_paths"]:
-                self.run[path.split(self.saved_files_path)[-1]].upload(
-                    path, wait=True
-                )
+                self.run[path.split(self.saved_files_path)[-1]].upload(path, wait=True)
 
         return self.run["sys"]["id"].fetch()
 
@@ -163,12 +187,22 @@ class NeptuneLogger(LoggerStrategy):
                 file_path, wait=True
             )
             os.remove(file_path)
+
     def stop_run(self):
         self.run.stop()
 
 
 class MLFlowLogger(LoggerStrategy):
-    def init_run(self, direction, optimization_metric, validation_metric, model_type, upload_files: Iterable[str], run_params, model_info) -> str:
+    def init_run(
+        self,
+        direction,
+        optimization_metric,
+        validation_metric,
+        model_type,
+        upload_files: Iterable[str],
+        run_params,
+        model_info,
+    ) -> str:
         mlflow.set_tracking_uri(run_params["tracking_uri"])
         mlflow.set_experiment(run_params["experiment_name"])
         self.run = mlflow.start_run(**run_params["start_run_params"])
@@ -216,7 +250,7 @@ class MLFlowLogger(LoggerStrategy):
                 dst_path=r"{}/saved_utils".format(self.saved_files_path),
             )
             with open(
-                    r"{}/saved_utils/params.json".format(self.saved_files_path)
+                r"{}/saved_utils/params.json".format(self.saved_files_path)
             ) as file:
                 params_logged = json.load(file)
         except:
@@ -231,6 +265,6 @@ class MLFlowLogger(LoggerStrategy):
                 file_path, file_path.split(self.saved_files_path)[-1].split("/")[1]
             )
             os.remove(file_path)
+
     def stop_run(self):
         mlflow.end_run()
-

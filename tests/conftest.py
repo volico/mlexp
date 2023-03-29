@@ -28,10 +28,10 @@ def logging_server_auth(request):
 @pytest.fixture(scope="module", autouse=True)
 def neptune_run_params(request):
     return {
-            "project": request.config.getoption("--neptune_project"),
-            "name": "Test",
-            "description": "1",
-        }
+        "project": request.config.getoption("--neptune_project"),
+        "name": "Test",
+        "description": "1",
+    }
 
 
 @pytest.fixture(scope="module", autouse=True)

@@ -106,7 +106,6 @@ class TestTrainer:
 
         trainer.init_run(logging_server, upload_files, **run_params)
 
-
         trainer.stop_run()
 
     @pytest.mark.parametrize("logging_server", list(RUN_PARAMS.keys()))
