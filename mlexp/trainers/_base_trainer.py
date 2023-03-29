@@ -93,11 +93,7 @@ class _BaseTrainer(ABC):
             callbacks=[],
         )
 
-        if self.logging_server == "neptune":
-            self.run.stop()
-
-        elif self.logging_server == "mlflow":
-            mlflow.end_run()
+        self.stop_run()
 
     @abstractmethod
     def _run_iteration(
@@ -110,10 +106,10 @@ class _BaseTrainer(ABC):
 
         results_dict = self._run_iteration(X, y, cv, params, trial.number)
 
-        self._log_metrics(results_dict["metrics"], trial)
-        self._log_params(results_dict["params"])
+        self.log_metrics(results_dict["metrics"], trial)
+        self.log_params(results_dict["params"])
         if "file_paths" in results_dict.keys():
-            self._log_files(results_dict["file_paths"])
+            self.log_files(results_dict["file_paths"])
 
         study_path = r"{}/saved_studies/optuna_study_{}.pickle".format(
             self.saved_files_path, trial.number
@@ -121,6 +117,6 @@ class _BaseTrainer(ABC):
         with open(study_path, "wb") as f:
             pickle.dump(self.study, f)
 
-        self._log_files([study_path])
+        self.log_files([study_path])
 
         return results_dict["metrics"][self.optimization_metric]

@@ -6,12 +6,12 @@ import sklearn
 from sklearn.metrics import make_scorer
 from sklearn.model_selection import cross_validate
 
-from mlexp.trainers._base_logger import _BaseLogger
+from mlexp.trainers._base_logger import _Logger
 from mlexp.trainers._base_trainer import _BaseTrainer
 from mlexp.trainers._utils import _save_models
 
 
-class SklearnTrainer(_BaseTrainer, _BaseLogger):
+class SklearnTrainer(_BaseTrainer, _Logger):
     """Training, logging and hyperparameters search for scikit-learn models."""
 
     def __init__(
