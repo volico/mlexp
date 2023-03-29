@@ -78,13 +78,13 @@ class _Logger(ABC):
             self._get_run_info(),
         )
 
-    def log_metrics(self, metrics_dict, trial):
+    def _log_metrics(self, metrics_dict, trial):
         self.logger.log_metrics(metrics_dict, trial)
 
-    def log_params(self, params):
+    def _log_params(self, params):
         self.logger.log_params(params)
 
-    def log_files(self, file_paths):
+    def _log_files(self, file_paths):
         self.logger.log_files(file_paths)
 
     def stop_run(self):
