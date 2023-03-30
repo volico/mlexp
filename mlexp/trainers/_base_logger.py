@@ -10,7 +10,7 @@ import neptune.new as neptune
 import numpy as np
 
 
-class _BaseLogger(ABC):
+class _Logger(ABC):
     """Class for experiment logging."""
 
     def __init__(
@@ -41,7 +41,61 @@ class _BaseLogger(ABC):
         os.makedirs(r"{}/saved_studies/".format(saved_files_path))
         os.makedirs(r"{}/saved_utils/".format(saved_files_path))
 
+        self.logger = None
+
         super().__init__()
+
+    def init_run(
+        self,
+        logging_server: Literal["neptune", "mlflow"],
+        upload_files: Iterable[str] = [],
+        **run_params
+    ) -> str:
+        """Initiation of logging server run.
+
+        :param logging_server: logging server.
+        :param upload_files: List of paths to files which will be logged in initiated run.
+        :param run_params: kwargs for server-specific parameters
+
+            If logging server == "mlflow" must contain following keys:
+
+                - experiment_name - will be passed to mlflow.set_experiment, e.g. mlflow.set_experiment(run_params["experiment_name"])
+                - tracking_uri - will be passed to mlflow.set_tracking_uri, e.g. mlflow.set_tracking_uri(run_params["tracking_uri"])
+                - start_run_params - will be unpacked and passed to mlflow.start_run, e.g. mlflow.start_run(\*\*run_params["start_run_params"])
+
+            If logging_server == "neptune":
+
+                - run_params will be unpacked and passed to neptune.init, e.g. neptune.init(\*\*run_params)
+
+        :return: run id of created run.
+        """
+
+        if logging_server == "neptune":
+            self.logger = NeptuneLogger(self.saved_files_path)
+        elif logging_server == "mlflow":
+            self.logger = MLFlowLogger(self.saved_files_path)
+
+        return self.logger.init_run(
+            self.direction,
+            self.optimization_metric,
+            self.validation_metric,
+            self.model_type,
+            upload_files,
+            run_params,
+            self._get_run_info(),
+        )
+
+    def _log_metrics(self, metrics_dict, trial):
+        self.logger.log_metrics(metrics_dict, trial)
+
+    def _log_params(self, params):
+        self.logger.log_params(params)
+
+    def _log_files(self, file_paths):
+        self.logger.log_files(file_paths)
+
+    def stop_run(self):
+        self.logger.stop_run()
 
     @abstractmethod
     def _get_run_info(
@@ -50,68 +104,62 @@ class _BaseLogger(ABC):
         """Constructing dict with info to upload to the run."""
         pass
 
+
+class LoggerStrategy(ABC):
+    def __init__(self, saved_files_path: str):
+        self.saved_files_path = saved_files_path
+
+    @abstractmethod
     def init_run(
         self,
-        logging_server: Literal["neptune", "optuna"],
-        upload_files: Iterable[str] = [],
-        **run_params
+        direction,
+        optimization_metric,
+        validation_metric,
+        model_type,
+        upload_files: Iterable[str],
+        run_params,
+        model_info,
     ) -> str:
-        """Initiation of logging server run.
+        pass
 
-        :param logging_server: logging server
-        :param upload_files: List of paths to files which will be logged in initiated run.
-        :param run_params: If logging server == "mlflow":
-            Mlflow run parameters as kwargs (will be passed to `mlflow.start_run <https://www.mlflow.org/docs/latest/python_api/mlflow.html#mlflow.start_run>`_).
+    @abstractmethod
+    def log_metrics(self, metrics_dict, trial):
+        pass
 
-            If logging_server == "neptune":
-            Kwarg neptune_run_params as dict of Neptune run parameters (will be passed to `neptune.init_run <https://docs.neptune.ai/api-reference/neptune#.init_run>`_).
+    @abstractmethod
+    def log_params(self, params):
+        pass
 
-        :return: run id of created run.
-        """
+    @abstractmethod
+    def log_files(self, file_paths):
+        pass
 
-        if logging_server == "neptune":
-            run_id = self._base_initiate_neptune_run(
-                upload_files=upload_files, **run_params
-            )
-            run_info = self._get_run_info()
-            if len(run_info["metadata"]) > 0:
-                for key, value in run_info["metadata"].items():
-                    self.run[key] = value
+    @abstractmethod
+    def stop_run(self):
+        pass
 
-            if len(run_info["artifact_paths"]) > 0:
-                for path in run_info["artifact_paths"]:
-                    self.run[path.split(self.saved_files_path)[-1]].upload(
-                        path, wait=True
-                    )
 
-        elif logging_server == "mlflow":
-            run_id = self._base_initiate_mlflow_run(
-                upload_files=upload_files, **run_params
-            )
-            run_info = self._get_run_info()
-            if len(run_info["metadata"]) > 0:
-                for key, value in run_info["metadata"].items():
-                    mlflow.log_param(key, value)
-
-            if len(run_info["artifact_paths"]) > 0:
-                for path in run_info["artifact_paths"]:
-                    mlflow.log_artifact(
-                        path, path.split(self.saved_files_path)[-1].split("/")[1]
-                    )
-
-        return run_id
-
-    def _base_initiate_neptune_run(self, neptune_run_params, upload_files=[]):
-        self.run = neptune.init(**neptune_run_params, run=None)
-        self.run["direction"] = self.direction
-        self.run["model_type"] = self.model_type
-        self.run["optimization_metric"] = self.optimization_metric
+class NeptuneLogger(LoggerStrategy):
+    def init_run(
+        self,
+        direction,
+        optimization_metric,
+        validation_metric,
+        model_type,
+        upload_files: Iterable[str],
+        run_params,
+        model_info,
+    ) -> str:
+        self.run = neptune.init(**run_params, run=None)
+        self.run["direction"] = direction
+        self.run["model_type"] = model_type
+        self.run["optimization_metric"] = optimization_metric
 
         file_name = r"{}/saved_utils/validation_metric.pickle".format(
             self.saved_files_path
         )
         with open(file_name, "wb") as f:
-            pickle.dump(self.validation_metric, f)
+            pickle.dump(validation_metric, f)
         self.run[file_name.split(self.saved_files_path)[-1]].upload(
             file_name, wait=True
         )
@@ -123,29 +171,57 @@ class _BaseLogger(ABC):
                     file_name, wait=True
                 )
 
-        self.logging_server = "neptune"
+        if len(model_info["metadata"]) > 0:
+            for key, value in model_info["metadata"].items():
+                self.run[key] = value
+
+        if len(model_info["artifact_paths"]) > 0:
+            for path in model_info["artifact_paths"]:
+                self.run[path.split(self.saved_files_path)[-1]].upload(path, wait=True)
 
         return self.run["sys"]["id"].fetch()
 
-    def _base_initiate_mlflow_run(
+    def log_metrics(self, metrics_dict, trial):
+        for metric in metrics_dict.keys():
+            self.run[metric].log(metrics_dict[metric])
+
+    def log_params(self, params):
+        self.run["params"].log(params)
+
+    def log_files(self, file_paths):
+        for file_path in file_paths:
+            self.run[file_path.split(self.saved_files_path)[-1]].upload(
+                file_path, wait=True
+            )
+            os.remove(file_path)
+
+    def stop_run(self):
+        self.run.stop()
+
+
+class MLFlowLogger(LoggerStrategy):
+    def init_run(
         self,
-        experiment_name,
-        upload_files=[],
-        tracking_uri=None,
-        mlflow_run_params=None,
-    ):
-        mlflow.set_tracking_uri(tracking_uri)
-        mlflow.set_experiment(experiment_name)
-        self.run = mlflow.start_run(**mlflow_run_params)
-        mlflow.log_param("direction", self.direction)
-        mlflow.log_param("model_type", self.model_type)
-        mlflow.log_param("optimization_metric", self.optimization_metric)
+        direction,
+        optimization_metric,
+        validation_metric,
+        model_type,
+        upload_files: Iterable[str],
+        run_params,
+        model_info,
+    ) -> str:
+        mlflow.set_tracking_uri(run_params["tracking_uri"])
+        mlflow.set_experiment(run_params["experiment_name"])
+        self.run = mlflow.start_run(**run_params["start_run_params"])
+        mlflow.log_param("direction", direction)
+        mlflow.log_param("model_type", model_type)
+        mlflow.log_param("optimization_metric", optimization_metric)
 
         file_name = r"{}/saved_utils/validation_metric.pickle".format(
             self.saved_files_path
         )
         with open(file_name, "wb") as f:
-            pickle.dump(self.validation_metric, f)
+            pickle.dump(validation_metric, f)
         mlflow.log_artifact(
             file_name, file_name.split(self.saved_files_path)[-1].split("/")[1]
         )
@@ -157,29 +233,23 @@ class _BaseLogger(ABC):
                     file_name, "saved_files/{}".format(file_name.split("/")[-1])
                 )
 
-        self.logging_server = "mlflow"
+        if len(model_info["metadata"]) > 0:
+            for key, value in model_info["metadata"].items():
+                mlflow.log_param(key, value)
+
+        if len(model_info["artifact_paths"]) > 0:
+            for path in model_info["artifact_paths"]:
+                mlflow.log_artifact(
+                    path, path.split(self.saved_files_path)[-1].split("/")[1]
+                )
 
         return self.run.info.run_id
 
-    def _log_metrics_neptune(self, metrics_dict, trial):
-        for metric in metrics_dict.keys():
-            self.run[metric].log(metrics_dict[metric])
-
-    def _log_metrics_mlflow(self, metrics_dict, trial):
+    def log_metrics(self, metrics_dict, trial):
         for metric in metrics_dict.keys():
             mlflow.log_metric(metric, metrics_dict[metric], step=trial.number)
 
-    def _log_metrics(self, metrics_dict, trial):
-        if self.logging_server == "neptune":
-            self._log_metrics_neptune(metrics_dict, trial)
-
-        elif self.logging_server == "mlflow":
-            self._log_metrics_mlflow(metrics_dict, trial)
-
-    def _log_params_neptune(self, params):
-        self.run["params"].log(params)
-
-    def _log_params_mlflow(self, params):
+    def log_params(self, params):
         try:
             mlflow.tracking.MlflowClient().download_artifacts(
                 self.run.info.run_uuid,
@@ -196,29 +266,12 @@ class _BaseLogger(ABC):
         params_logged.append(params)
         mlflow.log_dict(params_logged, "params.json")
 
-    def _log_params(self, params):
-        if self.logging_server == "neptune":
-            self._log_params_neptune(params)
-
-        elif self.logging_server == "mlflow":
-            self._log_params_mlflow(params)
-
-    def _log_files_neptune(self, file_paths):
-        for file_path in file_paths:
-            self.run[file_path.split(self.saved_files_path)[-1]].upload(
-                file_path, wait=True
-            )
-            os.remove(file_path)
-
-    def _log_files_mlflow(self, file_paths):
+    def log_files(self, file_paths):
         for file_path in file_paths:
             mlflow.log_artifact(
                 file_path, file_path.split(self.saved_files_path)[-1].split("/")[1]
             )
             os.remove(file_path)
 
-    def _log_files(self, file_paths):
-        if self.logging_server == "neptune":
-            self._log_files_neptune(file_paths)
-        elif self.logging_server == "mlflow":
-            self._log_files_mlflow(file_paths)
+    def stop_run(self):
+        mlflow.end_run()

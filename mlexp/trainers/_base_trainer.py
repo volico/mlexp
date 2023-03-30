@@ -93,11 +93,7 @@ class _BaseTrainer(ABC):
             callbacks=[],
         )
 
-        if self.logging_server == "neptune":
-            self.run.stop()
-
-        elif self.logging_server == "mlflow":
-            mlflow.end_run()
+        self.stop_run()
 
     @abstractmethod
     def _run_iteration(

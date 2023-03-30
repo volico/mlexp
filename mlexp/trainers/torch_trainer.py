@@ -7,12 +7,12 @@ from typing import Callable, Iterable, TypedDict
 import numpy as np
 import pytorch_lightning as pl
 
-from mlexp.trainers._base_logger import _BaseLogger
+from mlexp.trainers._base_logger import _Logger
 from mlexp.trainers._base_trainer import _BaseTrainer
 from mlexp.trainers._utils import _save_metric_curves
 
 
-class TorchTrainer(_BaseTrainer, _BaseLogger):
+class TorchTrainer(_BaseTrainer, _Logger):
     """Training, logging and hyperparameters search for pytorch-lightning neural network."""
 
     def __init__(

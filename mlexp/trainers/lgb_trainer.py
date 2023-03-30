@@ -5,12 +5,12 @@ import lightgbm as lgb
 import mlflow
 import numpy as np
 
-from mlexp.trainers._base_logger import _BaseLogger
+from mlexp.trainers._base_logger import _Logger
 from mlexp.trainers._base_trainer import _BaseTrainer
 from mlexp.trainers._utils import _save_metric_curves, _save_models
 
 
-class LgbTrainer(_BaseTrainer, _BaseLogger):
+class LgbTrainer(_BaseTrainer, _Logger):
     """Training, logging and hyperparameters search for lightgbm."""
 
     def __init__(
