@@ -68,7 +68,7 @@ optimize hyperparameters and log results to mlflow server.
         # URI of mlflow server (it will be printed in console after starting mlflow server)
         tracking_uri = 'http://127.0.0.1:5000/',
         # Let's set run_name to 'Example. LGBM' and add tag Hypothesis = 1
-        mlflow_run_params = {'run_name': 'Example. LGBM', 'tags': {'Hypothesis': '1'}},
+        start_run_params = {'run_name': 'Example. LGBM', 'tags': {'Hypothesis': '1'}},
         # Let's also log current_data_config.txt to mlflow server
         upload_files = ['/home/current_data_config.txt'])
 
