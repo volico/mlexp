@@ -52,13 +52,19 @@ class _Logger(ABC):
     ) -> str:
         """Initiation of logging server run.
 
-        :param logging_server: logging server ("neptune" or "mlflow").
+        :param logging_server: logging server.
         :param upload_files: List of paths to files which will be logged in initiated run.
-        :param run_params: If logging server == "mlflow":
-            Mlflow run parameters as kwargs (will be passed to `mlflow.start_run <https://www.mlflow.org/docs/latest/python_api/mlflow.html#mlflow.start_run>`_).
+        :param run_params: kwargs for server-specific parameters
+
+            If logging server == "mlflow" must contain following keys:
+
+                - experiment_name - will be passed to mlflow.set_experiment, e.g. mlflow.set_experiment(run_params["experiment_name"])
+                - tracking_uri - will be passed to mlflow.set_tracking_uri, e.g. mlflow.set_tracking_uri(run_params["tracking_uri"])
+                - start_run_params - will be unpacked and passed to mlflow.start_run, e.g. mlflow.start_run(\*\*run_params["start_run_params"])
 
             If logging_server == "neptune":
-            Kwarg neptune_run_params as dict of Neptune run parameters (will be passed to `neptune.init_run <https://docs.neptune.ai/api-reference/neptune#.init_run>`_).
+
+                - run_params will be unpacked and passed to neptune.init, e.g. neptune.init(\*\*run_params)
 
         :return: run id of created run.
         """
